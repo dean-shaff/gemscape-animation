@@ -1,0 +1,20 @@
+{
+  "name": "gemscapes-animation",
+  "version": "0.1.0",
+  "description": "Animations for Blue Dot Sessions gemscapes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/webpack --config webpack.config.js",
+    "watch": "./node_modules/.bin/webpack --watch --config webpack.config.js"
+  },
+  "author": "Dean Shaff",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^5.16.0",
+    "webpack": "^4.44.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.12"
+  }
+}
