@@ -40,38 +40,6 @@ function Parallax () {
     }
   }
 
-  // this.attrD = function () {
-  //   return (d, idx, nodes) => {
-  //     let node = nodes[idx]
-  //     let labelVal = d3.select(node).attr("label")
-  //     let dVal = d3.select(node).attr("d")
-  //     console.log(dVal)
-  //     return dVal
-  //   }
-  // }
-  //
-  // this.attrLabel = function () {
-  //   return (d, idx, nodes) => {
-  //     let node = nodes[idx]
-  //     let labelVal = d3.select(node).attr("label")
-  //     console.log(labelVal)
-  //
-  //
-  //
-  //     return labelVal
-  //   }
-  // }
-
-
-  // this.onMouseout = function () {
-  //   return (d, i, nodes) => {
-  //     let node = nodes[i]
-  //     d3.select(node).selectAll("path")
-  //       .enter()
-  //       .style("opacity", 0.5)
-  //
-  //   }
-  // }
 
 }
 
