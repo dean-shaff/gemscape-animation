@@ -1,5 +1,7 @@
-import Parallax from "./sandbox/parallax.js"
+// import { ParallaxByGroup, ParallaxByShape } from "./sandbox/parallax.js"
+import parallax from "./sandbox/parallax.js"
 
 
-let parallax = new Parallax()
-parallax.init()
+// let obj = new parallax.ParallaxByGroup()
+let obj = new parallax.ParallaxByShape()
+obj.init()
