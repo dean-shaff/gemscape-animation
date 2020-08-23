@@ -39,8 +39,11 @@ function ParallaxByGroup () {
 
   this.elem = null
 
-  this.init = function () {
-    this.elem = d3.select("svg")
+  this.init = function (elem) {
+    if (elem == null) {
+      elem = d3.select("svg")
+    }
+    this.elem = elem
     // add individual layers to groups.
     this.initLayerGroups()
     this.elem
@@ -79,7 +82,7 @@ function ParallaxByGroup () {
 
   this.onMouseleave = function () {
     return (d, i, nodes) => {
-      console.log("mouseleave")
+      console.log("ParallaxByGroup.onMouseleave: mouseleave")
       // this.elem.selectAll("g .layer")
       //   .attr("transform", "translate(0, 0)")
     }
@@ -89,18 +92,20 @@ function ParallaxByGroup () {
     const [width, height] = [this.elem.attr("width"), this.elem.attr("height")]
     return (d, idx, nodes) => {
       const [x, y] = d3.mouse(this.elem.node())
+      let val = document.getElementById('factor-spin-box').value
       let node = nodes[idx]
       let transformVal = d3.select(node).attr("transform")
       let labelVal = d3.select(node).attr("label")
       let factor = 0
       if (idx == 0) {
-        factor = 1./50
+        factor = -1./(val/2)
       } else if (idx == 1) {
-        factor = 1./100
+        factor = -1./val
       } else if (idx == 2) {
-        factor = -1./100
+        factor = 1./val
       }
-      transformVal = `translate(${-(x - width/2)*factor}, ${-(y - height/2)*factor})`
+      transformVal = `translate(${(x - width/2)*factor}, ${(y - height/2)*factor})`
+      // transformVal = `translate(${-(x - width/2)*factor}, 0)`
       return transformVal
     }
   }
