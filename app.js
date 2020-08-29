@@ -4,7 +4,7 @@ const fs = require('fs')
 const express = require('express')
 
 const app = express()
-const port = 3000
+const PORT = process.env.PORT || 8000
 
 const assetsDir = path.join(__dirname, 'assets')
 const distDir = path.join(__dirname, 'dist')
@@ -26,6 +26,6 @@ app.use('/assets', express.static(assetsDir))
 app.use(express.static(distDir))
 
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+app.listen(PORT, () => {
+  console.log(`App listening at ${PORT}`)
 })
