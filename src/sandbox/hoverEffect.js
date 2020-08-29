@@ -5,7 +5,9 @@ import util from './../util.js'
 
 function HoverEffect() {
 
-  this.scaleFactor = 1.1
+  this.sizeScaleFactor = 1.1
+  this.opacityScaleFactor = 1.5
+  this.transitionTime = 200
 
   this.init = function (elem) {
     if (elem == null) {
@@ -55,18 +57,18 @@ function HoverEffect() {
 
   /**
    * Given some x or y position `pos`, and some side length `len`, get the
-   * new position offset with a scale factor of `this.scaleFactor`
+   * new position offset with a scale factor of `this.sizeScaleFactor`
    * @param  {[type]} pos    [description]
    * @param  {[type]} length [description]
    * @return {[type]}        [description]
    */
   this.computeOffsets = function (pos, len) {
-    let scale = this.scaleFactor - 1.0
+    let scale = this.sizeScaleFactor - 1.0
     // let offset = -((scaledPos - pos) + (scaledLen - len)/2)
     // let offset = -(scaledPos - pos)
     // let offset = (scaledLen - len)/2
     let offset = pos*scale + len*scale/2
-    offset /= this.scaleFactor
+    offset /= this.sizeScaleFactor
     return offset
   }
 
@@ -80,6 +82,10 @@ function HoverEffect() {
       let w = this.elem.attr("width")/scale
       let h = this.elem.attr("height")/scale
 
+      this.sizeScaleFactor = document.getElementById("glow-size-spin-box").value
+      this.opacityScaleFactor = document.getElementById("glow-opacity-spin-box").value
+      this.transitionTime = document.getElementById("glow-transition-spin-box").value
+
       // const mouseDomPoint = new DOMPoint(mouse[0], mouse[1])
       const self = this
       // let selection = this.elem.selectAll('path,polygon')
@@ -90,11 +96,15 @@ function HoverEffect() {
         if (innerNode.isPointInFill(mousePoint)) {
           if (!self.transformed[idx]) {
             let op = self.opacities[idx]
-            op *= 1.5
+            op *= self.opacityScaleFactor
             if (op > 1.0) {
               op = 1.0
             }
-            inner.attr('fill-opacity', op)
+            inner
+              .transition()
+              .duration(self.transitionTime)
+              .ease(d3.easeLinear)
+              .attr('fill-opacity', op)
             let bbox = d3.select(this).node().getBBox()
             let bounds = d3.select(this).node().getBoundingClientRect()
             let xBefore = bounds.x
@@ -103,14 +113,26 @@ function HoverEffect() {
               self.computeOffsets(bbox.y, bbox.height),
             ]
             d3.select(this)
-              .attr('transform', `scale(${self.scaleFactor}) translate(${-xOffset}, ${-yOffset}) `)
+              .transition()
+              .duration(self.transitionTime)
+              .ease(d3.easeLinear)
+              .attr('transform', `scale(${self.sizeScaleFactor}) translate(${-xOffset}, ${-yOffset}) `)
           }
           self.transformed[idx] = true
         } else {
-          inner.attr('fill-opacity', self.opacities[idx])
-          // inner
-          d3.select(this)
-            .attr('transform', 'scale(1.0) translate(0, 0)')
+          if (!self.transformed[idx]) {
+            inner
+              .transition()
+              .duration(self.transitionTime)
+              .ease(d3.easeLinear)
+              .attr('fill-opacity', self.opacities[idx])
+            // inner
+            d3.select(this)
+              .transition()
+              .duration(self.transitionTime)
+              .ease(d3.easeLinear)
+              .attr('transform', 'scale(1.0) translate(0, 0)')
+          }
           self.transformed[idx] = false
         }
       })

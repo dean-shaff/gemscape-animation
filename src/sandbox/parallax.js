@@ -92,19 +92,25 @@ function ParallaxByGroup () {
     const [width, height] = [this.elem.attr("width"), this.elem.attr("height")]
     return (d, idx, nodes) => {
       const [x, y] = d3.mouse(this.elem.node())
-      let val = document.getElementById('factor-spin-box').value
+      let xVal = document.getElementById('parallax-x-spin-box').value / 1000
+      let yVal = document.getElementById('parallax-y-spin-box').value / 1000
+
       let node = nodes[idx]
       let transformVal = d3.select(node).attr("transform")
       let labelVal = d3.select(node).attr("label")
-      let factor = 0
+      let xFactor = 0
+      let yFactor = 0
       if (idx == 0) {
-        factor = -1./(val/2)
+        xFactor = -xVal*2
+        yFactor = -yVal*2
       } else if (idx == 1) {
-        factor = -1./val
+        xFactor = -xVal
+        yFactor = -yVal
       } else if (idx == 2) {
-        factor = 1./val
+        xFactor = xVal
+        yFactor = yVal
       }
-      transformVal = `translate(${(x - width/2)*factor}, ${(y - height/2)*factor})`
+      transformVal = `translate(${(x - width/2)*xFactor}, ${(y - height/2)*yFactor})`
       // transformVal = `translate(${-(x - width/2)*factor}, 0)`
       return transformVal
     }

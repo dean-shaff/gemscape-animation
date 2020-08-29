@@ -39,9 +39,14 @@
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label" for="parallax-factor">Parallax Factor</label>
-							<input class="input" name="parallax-factor" id="factor-spin-box" min="10" max="100" type="number" value="50">
+							<label class="label">x-direction factor</label>
+							<input class="input" id="parallax-x-spin-box" min="0" max="100" type="number" value="10" step="5">
 						</div>
+						<div class="field">
+							<label class="label" >y-direction factor</label>
+							<input class="input" id="parallax-y-spin-box" min="0" max="100" type="number" value="10" step="5">
+						</div>
+
 					</div>
 				</div>
 				<div id="parallax">
@@ -59,8 +64,12 @@
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">BPM factor</label>
-							<input class="input"  id="bpm-spin-box" min="1.1" max="2.0" type="number" value="1.5" step=0.1>
+							<label class="label">BPM</label>
+							<input class="input"  id="bpm-spin-box" min="50" max="250" type="number" value="100" step=10>
+						</div>
+						<div class="field">
+							<label class="label">BPM Opacity Factor</label>
+							<input class="input"  id="bpm-opacity-spin-box" min="1.1" max="2.0" type="number" value="1.5" step=0.1>
 						</div>
 					</div>
 				</div>
@@ -76,6 +85,22 @@
 		<div class="level-item ">
 			<div class="box">
 				<h3 class="title is-3">Glow on Hover</h3>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Size Factor</label>
+							<input class="input" id="glow-size-spin-box" min="1.0" max="2.0" type="number" value="1.05" step="0.05">
+						</div>
+						<div class="field">
+							<label class="label">Opacity Factor</label>
+							<input class="input" id="glow-opacity-spin-box" min="1.0" max="2.0" type="number" value="1.5" step="0.1">
+						</div>
+						<div class="field">
+							<label class="label">Transition Time</label>
+							<input class="input" id="glow-transition-spin-box" min="0" max="1000" type="number" value="200" step="100">
+						</div>
+					</div>
+				</div>
 				<div id="glow">
 				</div>
 			</div>

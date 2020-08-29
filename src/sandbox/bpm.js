@@ -16,7 +16,7 @@ function BPM () {
     }
     this.elem = elem
     this.bpm = bpm
-    this.interval = 1000 / (this.bpm / 60)
+    this.interval = this.calculateInterval(this.bpm)
     console.log(`BPM.init: bpm=${bpm}, interval=${this.interval}`)
 
     this.elem
@@ -24,8 +24,15 @@ function BPM () {
       .on("mouseleave", this.onMouseleave())
   }
 
+  this.calculateInterval = function (bpm) {
+    return 1000 / (bpm / 60)
+  }
+
+
   this.onMouseenter = function () {
     return (d, i, nodes) => {
+      this.bpm = document.getElementById('bpm-spin-box').value / 2.0
+      this.interval = this.calculateInterval(this.bpm)
       let node = nodes[i]
       // console.log(`BPM.onMouseenter: bps=${bps}, interval=${interval}`)
       this.timer = setInterval(this.beat(node), this.interval/2.0)
@@ -38,7 +45,8 @@ function BPM () {
     return () => {
       // console.log(`BPM.beat: on=${on}`)
       // let opacity = select.attr("opacity")
-      let factor = document.getElementById('bpm-spin-box').value
+
+      let factor = document.getElementById('bpm-opacity-spin-box').value
       if (on) {
         factor = 1/factor
       }
