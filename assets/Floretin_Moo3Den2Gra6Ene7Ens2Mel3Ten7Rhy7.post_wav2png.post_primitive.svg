@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="280" preserveAspectRatio="none" version="1.1" width="930">
+<rect fill="none" height="280" width="1024" x="0" y="0" />
+<g transform="scale(4.0000) translate(-11.13636363636364, 0.5)">
+<polygon fill="#6575a8" fill-opacity="0.370588" label="outline" layer="0" points="236.658580,42.486501,50.304247,53.218111,0.000000,22.866372,241.261940,24.114257" />
+<polygon fill="#646ea2" fill-opacity="0.1862745" label="outline" layer="0" points="131.313917,11.014720,225.287718,17.014720,131.313917,69.000000,42.411638,17.014720" />
+<polygon fill="#686daa" fill-opacity="0.190196" label="outline" layer="0" points="165.235195,56.476407,244.027671,48.217007,165.235195,18.892307,165.235195,48.217007" />
+<polygon fill="#5f7aa7" fill-opacity="0.262745" label="outline" layer="0" points="12,25 12,44 32,43" />
+<polygon fill="#6a90c0" fill-opacity="0.2411765" label="outline" layer="0" points="75.777253,8.954789,86.441184,34.666810,75.777253,66.723861,65.394110,34.666810" />
+<polygon fill="#6497b7" fill-opacity="0.397059" label="middle" layer="1" points="53,6 53,40 77,39" />
+<polygon fill="#6c65a3" fill-opacity="0.23235300000000003" label="middle" layer="1" points="137.939796,-0.000000,150.187167,6.000000,137.939796,69.000000,129.388408,6.000000" />
+<polygon fill="#697bb5" fill-opacity="0.31764675" label="middle" layer="1" points="193.214605,10.655266,211.062720,36.471650,193.214605,56.869600,191.214605,36.471650" />
+<polygon fill="#5e7ca5" fill-opacity="0.367647" label="middle" layer="1" points="70.062692,13.548626,92.258191,32.251133,70.062692,59.241960,69.799607,32.251133" />
+<polygon fill="#63598c" fill-opacity="0.32352975" label="middle" layer="1" points="110.465662,-0.000000,118.574481,34.536218,110.465662,69.000000,109.189553,34.536218" />
+</g>
+<g><text style="font-size: 20px;" x="15" y="20">bpm: 145</text><text style="font-size: 20px;" x="15" y="40">Mood: 3</text><text style="font-size: 20px;" x="15" y="60">Density: 2</text><text style="font-size: 20px;" x="15" y="80">Gravity: 6</text><text style="font-size: 20px;" x="15" y="100">Energy: 7</text><text style="font-size: 20px;" x="15" y="120">Ensemble: 2</text><text style="font-size: 20px;" x="15" y="140">Melody: 3</text><text style="font-size: 20px;" x="15" y="160">Tension: 7</text><text style="font-size: 20px;" x="15" y="180">Rhythm: 7</text><text style="font-size: 20px;" x="15" y="200"># shapes=10</text></g></svg>

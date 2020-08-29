@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="280" preserveAspectRatio="none" version="1.1" width="930">
+<rect fill="none" height="280" width="1024" x="0" y="0" />
+<g transform="scale(4.0000) translate(-11.13636363636364, 0.5)">
+<polygon fill="#b5d48d" fill-opacity="0.666667" label="outline" layer="0" points="61,7 61,62 255,32" />
+<polygon fill="#98b272" fill-opacity="0.733333" label="outline" layer="0" points="197.754217,-0.000000,255.000000,32.461260,197.754217,69.000000,144.168779,32.461260" />
+<polygon fill="#90a66b" fill-opacity="0.788235" label="outline" layer="0" points="238.426217,57.661873,239.802651,35.694305,16.283752,28.420336,8.803687,40.345902" />
+<polygon fill="#92a96b" fill-opacity="0.501961" label="outline" layer="0" points="231.565427,69.000000,149.729056,54.030508,149.485202,11.494296,240.207446,5.095255" />
+<polygon fill="#88b88a" fill-opacity="0.592157" label="outline" layer="0" points="58,14 58,55 129,27" />
+<polygon fill="#839463" fill-opacity="0.376471" label="middle" layer="1" points="84.554725,1.654201,124.276898,7.654201,84.554725,69.000000,66.932022,7.654201" />
+<polygon fill="#9ea461" fill-opacity="0.462745" label="middle" layer="1" points="95.282726,60.433502,116.215597,69.000000,126.999264,41.624989,115.030381,0.000000" />
+<polygon fill="#a4b179" fill-opacity="0.623529" label="middle" layer="1" points="225,0 225,69 240,20" />
+<polygon fill="#b2c26d" fill-opacity="0.572549" label="middle" layer="1" points="23.061531,28.346743,67.450429,34.346743,23.061531,42.694471,9.975114,34.346743" />
+<polygon fill="#00a9e2" fill-opacity="0.305882" label="middle" layer="1" points="169,2 169,67 182,38" />
+<polygon fill="#bdb860" fill-opacity="0.803922" label="middle" layer="1" points="221.993169,18.215179,186.724319,18.091258,187.227191,52.795351,208.922717,51.587834" />
+<polygon fill="#fbd742" fill-opacity="0.290196" label="middle" layer="1" points="162.178660,43.568428,151.389523,0.000000,147.800212,57.242378,149.721376,61.922532" />
+<polygon fill="#7ca27d" fill-opacity="0.678431" label="middle" layer="1" points="84.716589,-0.000000,94.153634,36.096531,84.716589,69.000000,79.998066,36.096531" />
+<polygon fill="#5cae98" fill-opacity="0.470588" label="middle" layer="1" points="160.856752,54.036272,178.232707,44.113677,160.856752,7.855782,160.856752,44.113677" />
+<polygon fill="#09a0c4" fill-opacity="0.290196" label="middle" layer="1" points="100.409834,65.492570,101.329659,11.986173,92.896063,17.156767,96.986498,69.000000" />
+<polygon fill="#ebc24a" fill-opacity="0.337255" label="detail" layer="2" points="105.615783,4.658209,99.294559,13.770869,104.569815,62.853938,109.848412,36.882868" />
+<polygon fill="#a9aa63" fill-opacity="0.525490" label="detail" layer="2" points="114,0 114,69 125,28" />
+<polygon fill="#99aa67" fill-opacity="0.529412" label="detail" layer="2" points="10.850283,40.284809,47.080124,39.165420,46.194399,27.210763,12.865805,30.092107" />
+<polygon fill="#b7a55d" fill-opacity="0.756863" label="detail" layer="2" points="229.156852,0.000000,229.664620,52.243918,224.334531,48.400330,225.384935,2.629370" />
+<polygon fill="#4aa59c" fill-opacity="0.541176" label="detail" layer="2" points="61.790766,20.068181,72.169906,26.068181,61.790766,56.091580,58.060240,26.068181" />
+</g>
+<g><text style="font-size: 20px;" x="15" y="20">bpm: 126</text><text style="font-size: 20px;" x="15" y="40">Mood: 4</text><text style="font-size: 20px;" x="15" y="60">Density: 7</text><text style="font-size: 20px;" x="15" y="80">Gravity: 7</text><text style="font-size: 20px;" x="15" y="100">Energy: 7</text><text style="font-size: 20px;" x="15" y="120">Ensemble: 9</text><text style="font-size: 20px;" x="15" y="140">Melody: 9</text><text style="font-size: 20px;" x="15" y="160">Tension: 7</text><text style="font-size: 20px;" x="15" y="180">Rhythm: 8</text><text style="font-size: 20px;" x="15" y="200"># shapes=20</text></g></svg>
