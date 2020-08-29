@@ -83,8 +83,11 @@ function ParallaxByGroup () {
   this.onMouseleave = function () {
     return (d, i, nodes) => {
       console.log("ParallaxByGroup.onMouseleave: mouseleave")
-      // this.elem.selectAll("g .layer")
-      //   .attr("transform", "translate(0, 0)")
+      this.elem.selectAll("g .layer")
+        .transition()
+        .duration(300)
+        .ease(d3.easeLinear)
+        .attr("transform", "translate(0, 0)")
     }
   }
 
