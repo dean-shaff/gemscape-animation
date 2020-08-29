@@ -57,7 +57,7 @@ function ParallaxByGroup () {
         .attr("class", "layer")
         .attr("transform", "translate(0, 0)")
         .attr("label", idx)
-      let removed = this.elem.selectAll("path")
+      let removed = this.elem.selectAll("path,polygon")
         .filter((d, i, nodes) => {
           let node = nodes[i]
           let layerVal = d3.select(node).attr("layer")

@@ -30,10 +30,19 @@ const getFilesList = async function () {
       }
     }
   })
+}
+
+const getBetween = function (str, start, end) {
+  let startIdx = str.indexOf(start) + start.length
+  let endIdx = str.slice(startIdx).indexOf(end) + startIdx
+
+  return str.slice(startIdx, endIdx)
 
 }
 
+
 export default {
   "loadSVG": loadSVG,
-  "getFilesList": getFilesList
+  "getFilesList": getFilesList,
+  "getBetween": getBetween
 }

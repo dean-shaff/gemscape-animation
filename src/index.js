@@ -9,7 +9,7 @@ import util from './util.js'
 function App () {
 
   const dropDownId = 'files'
-  const ids = ['parallax', 'bpm', 'glow']
+  const ids = ['parallax', 'bpm', 'glow', 'drop-shadow']
   this.filesList = null
 
   this.init = async function () {
