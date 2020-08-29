@@ -17,12 +17,11 @@ app.get('/', (req, res) => {
 
 app.get('/list', (req, res) => {
   let filesList = fs.readdirSync(assetsDir)
-  console.log(filesList)
   res.json({"files": filesList})
 })
 
 
-app.use('/assets', express.static(assetsDir))
+app.use('/assets/', express.static(assetsDir))
 app.use(express.static(distDir))
 
 

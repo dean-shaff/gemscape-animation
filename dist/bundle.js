@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -6350,6 +6350,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _dis
 
 /***/ }),
 
+/***/ "./src/index.css":
+/*!***********************!*\
+  !*** ./src/index.css ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack:///./src/index.css?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -6358,7 +6369,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _dis
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ \"./node_modules/d3/index.js\");\n/* harmony import */ var _sandbox_parallax_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sandbox/parallax.js */ \"./src/sandbox/parallax.js\");\n/* harmony import */ var _sandbox_bpm_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sandbox/bpm.js */ \"./src/sandbox/bpm.js\");\n/* harmony import */ var _sandbox_hoverEffect_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sandbox/hoverEffect.js */ \"./src/sandbox/hoverEffect.js\");\n/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util.js */ \"./src/util.js\");\n\n\n\n\n\n\n\n\nfunction App () {\n\n  const ids = [\"parallax\", \"bpm\", \"glow\"]\n\n  this.init = async function () {\n    let filesList = await _util_js__WEBPACK_IMPORTED_MODULE_4__[\"default\"].getFilesList()\n    let promises = ids.map(id => _util_js__WEBPACK_IMPORTED_MODULE_4__[\"default\"].loadSVG(`#${id}`, `assets/${filesList[0]}`))\n    await Promise.all(promises)\n\n    let obj = new _sandbox_parallax_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].ParallaxByGroup()\n    obj.init(d3__WEBPACK_IMPORTED_MODULE_0__[\"select\"](`#${ids[0]} svg`))\n\n    let bpmObj = new _sandbox_bpm_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"].BPM()\n    bpmObj.init(93/2, d3__WEBPACK_IMPORTED_MODULE_0__[\"select\"](`#${ids[1]} svg`))\n\n    let hoverObj = new _sandbox_hoverEffect_js__WEBPACK_IMPORTED_MODULE_3__[\"HoverEffect\"]()\n    hoverObj.init(d3__WEBPACK_IMPORTED_MODULE_0__[\"select\"](`#${ids[2]} svg`))\n  }\n}\n\n\n\nwindow.onload = async () => {\n  let app = new App()\n  await app.init()\n}\n\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ \"./node_modules/d3/index.js\");\n/* harmony import */ var _sandbox_parallax_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sandbox/parallax.js */ \"./src/sandbox/parallax.js\");\n/* harmony import */ var _sandbox_bpm_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sandbox/bpm.js */ \"./src/sandbox/bpm.js\");\n/* harmony import */ var _sandbox_hoverEffect_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sandbox/hoverEffect.js */ \"./src/sandbox/hoverEffect.js\");\n/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util.js */ \"./src/util.js\");\n\n\n\n\n\n\n\n\nfunction App () {\n\n  const dropDownId = 'files'\n  const ids = ['parallax', 'bpm', 'glow']\n  this.filesList = null\n\n  this.init = async function () {\n    let filesList = await _util_js__WEBPACK_IMPORTED_MODULE_4__[\"default\"].getFilesList()\n    this.filesList = filesList\n    // now add options to dropdown\n    let elem = document.getElementById(dropDownId)\n\n    this.filesList.forEach((fileName)=>{\n      let option = document.createElement('option')\n      option.innerHTML = fileName\n      option.setAttribute('value', fileName)\n      elem.appendChild(option)\n    })\n    elem.onchange = this.selectOnChange()\n  }\n\n  this.selectOnChange = function () {\n    return async (evt) => {\n      let fileName = document.getElementById(dropDownId).value\n      await this.setupSVG(fileName)\n    }\n  }\n\n  this.setSVG = async function (fileName) {\n    let evt = new Event('change')\n    let elem = document.getElementById(dropDownId)\n    elem.value = fileName\n    elem.dispatchEvent(evt)\n  }\n\n  this.setupSVG = async function (fileName) {\n    let promises = ids.map(id => _util_js__WEBPACK_IMPORTED_MODULE_4__[\"default\"].loadSVG(`#${id}`, `assets/${fileName}`))\n    await Promise.all(promises)\n\n    let obj = new _sandbox_parallax_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].ParallaxByGroup()\n    obj.init(d3__WEBPACK_IMPORTED_MODULE_0__[\"select\"](`#${ids[0]} svg`))\n\n    let bpmObj = new _sandbox_bpm_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"].BPM()\n    bpmObj.init(93/2, d3__WEBPACK_IMPORTED_MODULE_0__[\"select\"](`#${ids[1]} svg`))\n\n    let hoverObj = new _sandbox_hoverEffect_js__WEBPACK_IMPORTED_MODULE_3__[\"HoverEffect\"]()\n    hoverObj.init(d3__WEBPACK_IMPORTED_MODULE_0__[\"select\"](`#${ids[2]} svg`))\n  }\n}\n\n\n\nwindow.onload = async () => {\n  let app = new App()\n  await app.init()\n  let fileName = \"Hedgehog_Wallace_Moo8Den5Gra1Ene6Ens7Mel8Ten4Rhy6.post_wav2png.post_primitive.svg\"\n  await app.setSVG(fileName)\n\n}\n\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ }),
 
@@ -6407,6 +6418,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var d3__
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\nconst loadSVG = async function (selector, url) {\n  let target = document.querySelector(selector)\n  let ajax = new XMLHttpRequest();\n  ajax.open(\"GET\", `${window.location.href}${url}`, true);\n  ajax.send();\n  // Append the SVG to the target\n  return new Promise((resolve, reject) => {\n    ajax.onload = function() {\n      if (this.status === 200) {\n        target.innerHTML = ajax.responseText;\n        resolve()\n      } else {\n        reject()\n      }\n    }\n  })\n}\n\nconst getFilesList = async function () {\n  let ajax = new XMLHttpRequest()\n  ajax.open(\"GET\", `${window.location.href}list`, true)\n  ajax.send()\n\n  return new Promise((resolve, reject) => {\n    ajax.onload = function () {\n      if (this.status === 200) {\n        resolve(JSON.parse(this.responseText)['files'])\n      } else {\n        reject()\n      }\n    }\n  })\n\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  \"loadSVG\": loadSVG,\n  \"getFilesList\": getFilesList\n});\n\n\n//# sourceURL=webpack:///./src/util.js?");
+
+/***/ }),
+
+/***/ 0:
+/*!********************************************!*\
+  !*** multi ./src/index.js ./src/index.css ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("__webpack_require__(/*! ./src/index.js */\"./src/index.js\");\nmodule.exports = __webpack_require__(/*! ./src/index.css */\"./src/index.css\");\n\n\n//# sourceURL=webpack:///multi_./src/index.js_./src/index.css?");
 
 /***/ })
 
