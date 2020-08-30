@@ -1,33 +1,28 @@
-const path = require('path');
-
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-
+const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
+  entry: "./src/index.js",
   mode: "development",
-  entry: [
-    './src/index.js',
-    "./src/index.css"
-  ],
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
-  },
   module: {
     rules: [
       {
+        test: /\.(js|jsx)$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: "babel-loader",
+        options: { presets: ["@babel/env"] }
+      },
+      {
         test: /\.css$/,
-        use:[
-          MiniCssExtractPlugin.loader,
-          "css-loader"
-        ]
+        use: ["style-loader", "css-loader"]
       }
     ]
   },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename:"bundle.css"
-    })
-  ],
-
+  resolve: { extensions: ["*", ".js", ".jsx"] },
+  output: {
+    path: path.resolve(__dirname, "dist/"),
+    publicPath: "/dist/",
+    filename: "bundle.js"
+  },
+  // plugins: [new webpack.HotModuleReplacementPlugin()]
 };

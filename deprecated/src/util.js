@@ -16,23 +16,6 @@ const loadSVG = async function (selector, url) {
   })
 }
 
-const getSVG = async function (fileName) {
-  let ajax = new XMLHttpRequest();
-  ajax.open("GET", `${window.location.href}assets/${fileName}`, true);
-  ajax.send();
-
-  return new Promise((resolve, reject) => {
-    ajax.onload = function() {
-      if (this.status === 200) {
-        resolve(ajax.responseText)
-      } else {
-        reject()
-      }
-    }
-  })
-}
-
-
 const getFilesList = async function () {
   let ajax = new XMLHttpRequest()
   ajax.open("GET", `${window.location.href}list`, true)
@@ -54,12 +37,12 @@ const getBetween = function (str, start, end) {
   let endIdx = str.slice(startIdx).indexOf(end) + startIdx
 
   return str.slice(startIdx, endIdx)
+
 }
 
 
 export default {
   "loadSVG": loadSVG,
-  "getSVG": getSVG,
   "getFilesList": getFilesList,
   "getBetween": getBetween
 }
