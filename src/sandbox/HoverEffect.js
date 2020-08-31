@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-import util from './../util.js'
+import { getBetween } from './../util.js'
 
 
 function HoverEffect() {
@@ -29,9 +29,9 @@ function HoverEffect() {
     let transform = this.elem.select('g').attr('transform')
     console.log(`HoverEffect: transform=${transform}`)
 
-    let translateStr = util.getBetween(transform, 'translate(', ')')
+    let translateStr = getBetween(transform, 'translate(', ')')
     let translate = translateStr.split(',').map(val => parseFloat(val))
-    let scaleStr = util.getBetween(transform, 'scale(', ')')
+    let scaleStr = getBetween(transform, 'scale(', ')')
     let scale = parseFloat(scaleStr)
 
     console.log(`HoverEffect: translate=${translate}, scale=${scale}`)
@@ -141,6 +141,3 @@ function HoverEffect() {
 }
 
 export { HoverEffect }
-// export default {
-//   'HoverEffect': HoverEffect
-// }

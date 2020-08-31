@@ -1,4 +1,4 @@
-const loadSVG = async function (selector, url) {
+export const loadSVG = async function (selector, url) {
   let target = document.querySelector(selector)
   let ajax = new XMLHttpRequest();
   ajax.open("GET", `${window.location.href}${url}`, true);
@@ -16,7 +16,7 @@ const loadSVG = async function (selector, url) {
   })
 }
 
-const getFilesList = async function () {
+export const getFilesList = async function () {
   let ajax = new XMLHttpRequest()
   ajax.open("GET", `${window.location.href}list`, true)
   ajax.send()
@@ -32,17 +32,31 @@ const getFilesList = async function () {
   })
 }
 
-const getBetween = function (str, start, end) {
+export const getBetween = function (str, start, end) {
   let startIdx = str.indexOf(start) + start.length
   let endIdx = str.slice(startIdx).indexOf(end) + startIdx
 
   return str.slice(startIdx, endIdx)
-
 }
 
+export const processTransformStr = function (transform) {
+  let returnVal = {}
 
-export default {
-  "loadSVG": loadSVG,
-  "getFilesList": getFilesList,
-  "getBetween": getBetween
+  if (transform.includes('translate')) {
+    let translateStr = getBetween(transform, 'translate(', ')')
+    let delim = ','
+    if (!translateStr.includes(',')) {
+      delim = ' '
+    }
+    let translate = translateStr.split(delim).map(val => parseFloat(val))
+    returnVal['translate'] = translate
+  }
+
+  if (transform.includes('scale')) {
+    let scaleStr = getBetween(transform, 'scale(', ')')
+    let scale = parseFloat(scaleStr)
+    returnVal['scale'] = scale
+  }
+
+  return returnVal
 }

@@ -121,7 +121,4 @@ function ParallaxByGroup () {
 }
 
 
-export default {
-  "ParallaxByShape": ParallaxByShape,
-  "ParallaxByGroup": ParallaxByGroup
-}
+export { ParallaxByGroup, ParallaxByShape }

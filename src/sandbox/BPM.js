@@ -88,6 +88,4 @@ function BPM () {
 
 }
 
-export default {
-  "BPM": BPM
-}
+export { BPM }
