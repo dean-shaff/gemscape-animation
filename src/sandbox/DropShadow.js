@@ -5,7 +5,7 @@ import { processTransformStr } from './../util.js'
 
 function DropShadow() {
 
-  this.sizeScaleFactor = 1.1
+  this.sizeScaleFactor = 1.5
   this.opacityScaleFactor = 1.5
   this.transitionTime = 200
 
@@ -40,6 +40,7 @@ function DropShadow() {
     let removed = this.elem.selectAll('path,polygon').remove()
     let group = this.elem.select('g')
     removed.nodes().forEach(node => {
+      let layer = d3.select(node).attr('layer')
       let subGroup = group.append('g')
 
       let shadow = d3.select(node).clone()
@@ -47,64 +48,93 @@ function DropShadow() {
       shadow.attr('fill', '#282828')
       let shadowGroup = subGroup.append('g')
       shadowGroup.attr('class', 'shadow')
+      shadowGroup.attr('layer', layer)
       shadowGroup.append(() => shadow.node())
 
       let foregroudGroup = subGroup.append('g')
       foregroudGroup.attr('class', 'foreground')
+      foregroudGroup.attr('layer', layer)
       foregroudGroup.append(() => node)
     })
     group.attr("class", 'origin')
   }
 
-  this.computeOffset = function (pos, len) {
-    let scale = this.sizeScaleFactor - 1.0
+  this.computeOffset = function (pos, len, sizeScaleFactor) {
+    let scale = sizeScaleFactor - 1.0
     let offset = pos*scale + len*scale/2
-    offset /= this.sizeScaleFactor
+    offset /= sizeScaleFactor
     return offset
   }
 
   this.onMousemove = function (scale, translate) {
+    const transformCoord = (val, i) => val/scale - translate[i]
     console.log(`DropShadow.onMousemove: scale=${scale}, translate=${translate}`)
     const [width, height] = [this.elem.attr('width'), this.elem.attr('height')]
+    const [widthScaled, heightScaled] = [width, height].map(transformCoord)
     const self = this
+
+    let scales = []
+    this.elem.selectAll('g.shadow')
+      .filter(this.filter('1'))
+      .each(
+    function (_d, _idx, _nodes ) {
+      let path = d3.select(this).select('path,polygon')
+      const bbox = path.node().getBBox()
+      let maxX = Math.max(bbox.x, widthScaled - bbox.x)
+      let scale = d3.scalePow()
+        .exponent(2.0)
+        .domain([0, maxX])
+        .range([1.1, 2.5])
+      scales.push(scale)
+    })
+
     return (d, idx, nodes) => {
-      this.elem.selectAll('g.shadow').each(function (_d, _idx, _nodes ) {
+      this.elem.selectAll('g.shadow')
+        .filter(this.filter('1'))
+        .each(
+      function (_d, _idx, _nodes ) {
         let path = d3.select(this).select('path,polygon')
-        const mouse = d3.mouse(self.elem.node()).map((val, i) => val/scale - translate[i])
+        const mouse = d3.mouse(self.elem.node()).map(transformCoord)
         const bbox = path.node().getBBox()
 
-        let xVal = -0.1/self.sizeScaleFactor
-        let yVal = -0.1/self.sizeScaleFactor
+        let xMouseOffset = mouse[0]-bbox.x-bbox.width/2
+        let yMouseOffset = mouse[1]-bbox.y-bbox.height/2
 
-        let xOffset = self.computeOffset(bbox.x, bbox.width)
-        let yOffset = self.computeOffset(bbox.y, bbox.height)
+        let sizeScaleFactor = scales[_idx](Math.abs(xMouseOffset))
+        // let sizeScaleFactor = 1.1
+        let xVal = -0.5/sizeScaleFactor
+        let yVal = -0.5/sizeScaleFactor
 
+        let xOffset = self.computeOffset(bbox.x, bbox.width, sizeScaleFactor)
+        let yOffset = self.computeOffset(bbox.y, bbox.height, sizeScaleFactor)
+
+        // console.log(`DropShadow.onMousemove: ${sizeScaleFactor}, (${xMouseOffset}, ${yMouseOffset})`)
         // let xOffset = bbox.x + bbox.width/2
         // let yOffset = bbox.y + bbox.height/2
 
-        let transX = xVal*(mouse[0]-bbox.x-bbox.width/2) - xOffset
-        let transY = yVal*(mouse[1]-bbox.y-bbox.height/2) - yOffset
-        let transformVal = `scale(${self.sizeScaleFactor}) translate(${transX}, ${transY})`
+        let transX = xVal*(xMouseOffset) - xOffset
+        let transY = yVal*(yMouseOffset) - yOffset
+        let transformVal = `scale(${sizeScaleFactor}) translate(${transX}, ${transY})`
         // console.log(transformVal)
 
         d3.select(this)
-
           .attr('transform', transformVal)
 
         const bboxScale = path.node().getBBox()
 
         if (! self.transformed[_idx]) {
           path
-            .attr('fill-opacity', 0.1)
+            .attr('fill-opacity', 0.2)
         }
         self.transformed[_idx] = true
       })
 
       this.elem.selectAll('g.foreground')
+        .filter(this.filter('1'))
         .select('path,polygon')
         .attr('fill-opacity', (_d, _idx, _nodes) => {
           let op = self.opacities[_idx]
-          return 1.2*op
+          return 1.5*op
         })
     }
   }
@@ -121,9 +151,11 @@ function DropShadow() {
     return (d, idx, nodes) => {
       console.log(`DropShadow.onMouseleave`)
       this.elem.selectAll('g.shadow')
+        .filter(this.filter('1'))
         .select('path,polygon')
         .attr('fill-opacity', 0.0)
       this.elem.selectAll('g.foreground')
+        .filter(this.filter('1'))
         .select('path,polygon')
         .attr('fill-opacity', (_d, _idx, _nodes) => {
           let op = self.opacities[_idx]
