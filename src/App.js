@@ -21,14 +21,14 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    console.log(`App.componentDidMount`)
     let filesList = await util.getFilesList()
     console.log(`App.componentDidMount: filesList.length=${filesList.length}`)
+    let initFileName = 'Tralaga_Moo4Den7Gra7Ene7Ens9Mel1Ten7Rhy8.post_wav2png.post_primitive.svg'
     this.setState({
       "fileNames": filesList,
-      "currentFileName": filesList[0]
+      "currentFileName": initFileName
     })
-    this.loadSVG()
+    await this.loadSVG(this.state.currentFileName)
   }
 
   renderOptions() {
@@ -39,9 +39,9 @@ class App extends Component {
     return component
   }
 
-  loadSVG(){
-    util.getSVG(this.state.currentFileName).then((contents) => {
-      console.log(`handleChange: contents.length=${contents.length}`)
+  loadSVG(fileName){
+    util.getSVG(fileName).then((contents) => {
+      console.log(`loadSVG: ${fileName}, contents.length=${contents.length}`)
       this.setState({
         'svgContents': contents
       })
@@ -52,9 +52,9 @@ class App extends Component {
     const value = evt.target.value
     console.log(`handleChange: ${value}`)
     this.setState({
-      "currentFileName": evt.target.value
+      "currentFileName": value
     })
-    this.loadSVG()
+    this.loadSVG(value)
   }
 
   render() {
@@ -68,7 +68,7 @@ class App extends Component {
       			<div className="box">
       				<label className="label">Choose an SVG file:</label>
       				<div className="select">
-      				  <select onChange={this.handleChange} value={this.currentFileName}>
+      				  <select onChange={this.handleChange} value={this.state.currentFileName}>
                   {this.renderOptions()}
       				  </select>
       				</div>
