@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 
 import Parallax from "./components/Parallax.js"
-import util from "./util.js"
+import { getFilesList, getSVG, parseGemscapeXML } from "./util.js"
 
 import "./App.css"
 
@@ -13,7 +13,7 @@ class App extends Component {
     this.state = {
       fileNames: new Array(0),
       currentFileName: '',
-      svgContents: ''
+      svg: null
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    let filesList = await util.getFilesList()
+    let filesList = await getFilesList()
     console.log(`App.componentDidMount: filesList.length=${filesList.length}`)
     let initFileName = 'Tralaga_Moo4Den7Gra7Ene7Ens9Mel1Ten7Rhy8.post_wav2png.post_primitive.svg'
     this.setState({
@@ -40,10 +40,10 @@ class App extends Component {
   }
 
   loadSVG(fileName){
-    util.getSVG(fileName).then((contents) => {
+    getSVG(fileName).then((contents) => {
       console.log(`loadSVG: ${fileName}, contents.length=${contents.length}`)
       this.setState({
-        'svgContents': contents
+        'svg': parseGemscapeXML()(contents)
       })
     })
   }
@@ -58,7 +58,7 @@ class App extends Component {
   }
 
   render() {
-    console.log(`App.render: svgContents.length=${this.state.svgContents.length}`)
+    // console.log(`App.render: svg.paths.length=${this.state.svg.paths.length}`)
     return (
       <div className="container">
       	<h1 className="title is-1">Gemscape Animation Sandbox</h1>
@@ -76,7 +76,7 @@ class App extends Component {
       		</div>
       	</div>
       </div>
-      <Parallax svgContents={this.state.svgContents}></Parallax>
+      <Parallax svg={this.state.svg}></Parallax>
       </div>
     )
   }
