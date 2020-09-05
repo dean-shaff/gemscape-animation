@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import Parallax from "./components/Parallax.js"
+import { ParallaxContainer } from "./components/Parallax.js"
 import { getFilesList, getSVG, parseGemscapeXML } from "./util.js"
 
 import "./App.css"
@@ -76,7 +76,7 @@ class App extends Component {
       		</div>
       	</div>
       </div>
-      <Parallax svg={this.state.svg}></Parallax>
+      <ParallaxContainer svg={this.state.svg}></ParallaxContainer>
       </div>
     )
   }
