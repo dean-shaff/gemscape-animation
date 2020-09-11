@@ -1,7 +1,7 @@
 import React,  { Component, useRef, useState } from "react"
 import ReactDOM from 'react-dom'
 
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated, config } from 'react-spring'
 
 import Gemscape from "./Gemscape.js"
 import Gem from './Gem.js'
@@ -26,11 +26,11 @@ export class ParallaxContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      xVal: 50,
-      yVal: 50,
-      mass: 10,
-      tension: 550,
-      friction: 140
+      xVal: 10,
+      yVal: 10,
+      mass: 1,
+      tension: 120,
+      friction: 14
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -65,10 +65,10 @@ export class ParallaxContainer extends Component {
               </div>
               <div className="columns">
                 <div className="column">
-                  <Slider val={this.state.mass} onChange={this.handleChange} min={1} max={50} step={5} name="mass" title="Mass"/>
+                  <Slider val={this.state.mass} onChange={this.handleChange} min={1} max={500} step={5} name="mass" title="Mass"/>
                 </div>
                 <div className="column">
-                  <Slider val={this.state.tension} onChange={this.handleChange} min={10} max={2000} step={100} name="tension" title="Tension"/>
+                  <Slider val={this.state.tension} onChange={this.handleChange} min={10} max={1000} step={100} name="tension" title="Tension"/>
                 </div>
                 <div className="column">
                   <Slider val={this.state.friction} onChange={this.handleChange} min={10} max={500} step={30} name="friction" title="Friction"/>
@@ -115,8 +115,17 @@ export  function Parallax (props) {
       return translateStr
     }
   }
+  const configObj = {
+    mass: props.mass, tension: props.tension, friction: props.friction
+  }
+
   console.log(`Parallax: mass=${props.mass} tension=${props.tension} friction=${props.friction}`)
-  const [state, set] = useSpring(() => ({ xy: [0, 0], config: { mass: props.mass, tension: props.tension, friction: props.friction } }))
+  const [state, set] = useSpring(() => ({ xy: [0, 0], config: configObj }))
+  set({
+    'config': configObj
+  })
+  // const [state, set] = useSpring(() => ({ xy: [0, 0], config: config.molasses }))
+  // const [state, set] = useSpring(() => ({ xy: [0, 0], config: config.gentle }))
 
   let gemscape = null
   if (props.svg != null) {
