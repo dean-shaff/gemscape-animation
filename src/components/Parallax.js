@@ -8,12 +8,29 @@ import Gem from './Gem.js'
 import { scale, parseGemscapeXML } from './../util.js'
 
 
+const Slider = (props) => {
+  const {title, val, ...otherProps} = props
+
+  return (
+    <div className="field">
+      <label className="label">{title}</label>
+      <input className="slider is-fullwidth has-output" type="range" value={val} {...otherProps}></input>
+      <output>{val}</output>
+    </div>
+  )
+}
+
+
+
 export class ParallaxContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      xVal: 100,
-      yVal: 100,
+      xVal: 50,
+      yVal: 50,
+      mass: 10,
+      tension: 550,
+      friction: 140
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -34,16 +51,39 @@ export class ParallaxContainer extends Component {
         <div className="level-left">
         <div className="level-item">
           <div className="box">
-            <h3 className="title is-3">Parallax</h3>
-            <div className="field">
-              <label className="label">x-direction factor</label>
-              <input className="input" name="xVal" min="0" max="100" type="number" value={this.state.xVal} step="5" onChange={this.handleChange}></input>
+            <div className="level">
+              <h3 className="title is-3">Parallax</h3>
             </div>
-            <div className="field">
-              <label className="label">y-direction factor</label>
-              <input className="input" name="yVal" min="0" max="100" type="number" value={this.state.yVal} step="5" onChange={this.handleChange}></input>
+            <div className="box">
+              <div className="columns">
+                <div className="column">
+                  <Slider val={this.state.xVal} onChange={this.handleChange} min={5} max={100} step={5} name="xVal" title="x-direction factor"/>
+                </div>
+                <div className="column">
+                  <Slider val={this.state.yVal} onChange={this.handleChange} min={5} max={100} step={5} name="yVal" title="y-direction factor"/>
+                </div>
+              </div>
+              <div className="columns">
+                <div className="column">
+                  <Slider val={this.state.mass} onChange={this.handleChange} min={1} max={50} step={5} name="mass" title="Mass"/>
+                </div>
+                <div className="column">
+                  <Slider val={this.state.tension} onChange={this.handleChange} min={10} max={2000} step={100} name="tension" title="Tension"/>
+                </div>
+                <div className="column">
+                  <Slider val={this.state.friction} onChange={this.handleChange} min={10} max={500} step={30} name="friction" title="Friction"/>
+                </div>
+              </div>
+
             </div>
-            <Parallax {...this.props} xVal={this.state.xVal} yVal={this.state.yVal}></Parallax>
+            <Parallax
+              {...this.props}
+              xVal={this.state.xVal}
+              yVal={this.state.yVal}
+              mass={this.state.mass}
+              tension={this.state.tension}
+              friction={this.state.friction}>
+            </Parallax>
           </div>
         </div>
         </div>
@@ -75,8 +115,8 @@ export  function Parallax (props) {
       return translateStr
     }
   }
-
-  const [state, set] = useSpring(() => ({ xy: [0, 0], config: { mass: 10, tension: 550, friction: 140 } }))
+  console.log(`Parallax: mass=${props.mass} tension=${props.tension} friction=${props.friction}`)
+  const [state, set] = useSpring(() => ({ xy: [0, 0], config: { mass: props.mass, tension: props.tension, friction: props.friction } }))
 
   let gemscape = null
   if (props.svg != null) {

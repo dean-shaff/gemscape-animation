@@ -62,7 +62,7 @@ export const scale = function(domain, range) {
   const ratio = rangeRange / domainRange
   return domainVal => {
     let diff = domainVal - domain[0]
-    return range[0] + diff*ratio 
+    return range[0] + diff*ratio
   }
 }
 
@@ -120,7 +120,9 @@ export const parseGemscapeXML = function (gemTags) {
       parsed.paths.push({
         'data': data,
         'fillOpacity': get(path, 'fill-opacity'),
+        '__fillOpacity': get(path, 'fill-opacity'),
         'fill': get(path, 'fill'),
+        '__fill': get(path, 'fill'),
         'type': path.tagName
       })
     }
