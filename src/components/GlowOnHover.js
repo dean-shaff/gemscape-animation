@@ -1,7 +1,9 @@
 import React,  { Component, useRef, useState } from "react"
 import ReactDOM from 'react-dom'
 
-import { useSprings, animated } from 'react-spring'
+// import { useSpring, animated } from 'react-spring'
+import { Spring, animated } from 'react-spring/renderprops'
+// import { motion } from 'framer-motion'
 
 import Gemscape from "./Gemscape.js"
 import Gem from './Gem.js'
@@ -35,7 +37,8 @@ export class GlowOnHoverContainer extends Component {
         <div className="level-item">
           <div className="box">
             <h3 className="title is-3">GlowOnHover</h3>
-            <GlowOnHover {...this.props}></GlowOnHover>
+            {/*<OpacityOnHover mass={1} tension={120}  {...this.props}></OpacityOnHover>*/}
+            <GlowOnHover config={{mass: 1.0, tension: 280, friction:120}} {...this.props}></GlowOnHover>
           </div>
         </div>
         </div>
@@ -44,104 +47,144 @@ export class GlowOnHoverContainer extends Component {
   }
 }
 
+class OpacityOnHover extends React.Component {
 
-export  function GlowOnHover (props) {
-  const gemscapeRef = useRef(null);
-  const pathRefs = []
+  constructor(props) {
+    super(props)
+    this.state = {
+      toggle: true,
+      opacity: 1
+    }
+    this.ref = React.createRef()
+    this.toggle = this.toggle.bind(this)
+  }
 
-  // const [opacities, setOpacities] = useState([])
-  const [inside, setInside] = useState([])
-  const [springs, set, stop] = useSprings(
-    props.number,
-    index => ({
-      from: {opacity: 0.5},
-      to: {opacity: 1.0},
-      config: {duration: 1000}
+  toggle () {
+    this.setState({
+      'toggle': ! this.state.toggle
     })
-  )
+  }
 
-  const calcCursorFactory = function () {
-    return (x, y) => {
-      const svg = gemscapeRef.current.svg
-      const paths = props.svg.paths
-      let point = svg.createSVGPoint()
-      point.x = x
-      point.y = y
-      point = point.matrixTransform(svg.getScreenCTM().inverse())
+  render() {
+    if (this.props.svg != null) {
+      const onMouseMove = ({ clientX: x, clientY: y }) => {
+        this.setState({
+          'opacity': x / this.ref.current.offsetWidth
+        })
+      }
 
-      let matrix = pathRefs[0].path.getCTM()
+      return (
+        <div ref={this.ref} onMouseMove={onMouseMove} className="title">
+          <Spring
+            from={{ opacity: 0 }}
+            to={{ opacity: this.state.opacity }}
+            config={this.props.config}>
+            {props => <div style={props}>Hello</div>}
+          </Spring>
+        </div>
+      )
+    }
+    return null
+  }
+}
+
+
+
+export class GlowOnHover extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      opacities: new Array()
+    }
+    this.pathRefs = new Array()
+    this.gemscapeRef = React.createRef()
+    this.calcOpacities = this.calcOpacities.bind(this)
+  }
+
+  // componentDidMount() {
+  //   const paths = this.props.svg.paths
+  //   console.log(`GlowOnHover.componentDidMount: ${paths.length}`)
+  // }
+
+  calcOpacities (x, y) {
+    const svg = this.gemscapeRef.current.svg
+    const paths = this.props.svg.paths
+    let point = svg.createSVGPoint()
+    point.x = x
+    point.y = y
+    point = point.matrixTransform(svg.getScreenCTM().inverse())
+
+    if (this.pathRefs[0] !== undefined) {
+      let matrix = this.pathRefs[0].path.getCTM()
       let cursor = point.matrixTransform(matrix.inverse())
 
-      set(idx => {
-        let inside = pathRefs[idx].path.isPointInFill(cursor)
+      const newOpacities = this.pathRefs.map((path, idx) => {
+        let inside = path.path.isPointInFill(cursor)
+        let fillOpacity = parseFloat(paths[idx]['__fillOpacity'])
         if (inside) {
-          return {opacity: 1.0}
+          return fillOpacity * 1.5
         } else {
-          return {opacity: 0.1}
+          return fillOpacity * 0.5
         }
       })
-
-      // let newInside = pathRefs.map((gem, idx) => {
-      //   let isInside = gem.path.isPointInFill(cursor)
-      //   if (isInside) {
-      //     let newOp = paths[idx].__fillOpacity * 1.5
-      //     if (newOp > 1.0) {
-      //       newOp = 1.0
-      //     }
-      //     // return newOp.toString()
-      //   } else {
-      //     // return paths[idx].__fillOpacity
-      //   }
-      //   return isInside
-      // })
-
-      // setInside(newInside)
-      // setOpacities(newOpacities)
-      return [cursor.x, cursor.y]
+      return newOpacities
+    } else {
+      return (new Array(this.props.svg.paths.length)).fill(1.0)
     }
   }
 
-  const calcTransformFactory = function (xScale, yScale) {
-    const [width, height] = [props.svg.svg['width'], props.svg.svg['height']]
-    return (x, y) => {
-      let xPos = (x - width/2)
-      let yPos = (y - height/2)
-      let translateStr = `translate(${xPos*xScale}, ${yPos*yScale})`
-      return translateStr
+  render() {
+    if (this.props.svg != null) {
+      const svg = this.props.svg.svg
+      const paths = this.props.svg.paths
+      const onMouseMove = ({ clientX: x, clientY: y }) => {
+        // console.log(`onMouseMove`)
+        const opacities = this.calcOpacities(x, y)
+        this.setState({
+          'opacities': opacities
+        })
+      }
+      svg.onMouseMove = onMouseMove
+      let gems = paths.map((val, idx) => {
+        return (
+          <g key={idx}>
+            <Spring config={this.props.config} from={{opacity: 1}} to={{opacity: this.state.opacities[idx]}}>
+              {props => (
+                <Gem {...val} fillOpacity={props.opacity} ref={ref => this.pathRefs[idx] = ref}/>
+              )}
+            </Spring>
+          </g>
+        )
+      })
+      return (
+        <Gemscape svg={svg} rect={this.props.svg.rect} g={this.props.svg.g} ref={this.gemscapeRef}>
+          {gems}
+        </Gemscape>
+      )
+
+      // svg.onMouseMove = onMouseMove
+      // return (
+      //   <Gemscape svg={svg} rect={this.props.svg.rect} g={this.props.svg.g} ref={this.gemscapeRef}>
+      //     {/*<Spring config={this.props.config} to={{ 'opacities': this.state.opacities }}>*/}
+      //     <Spring config={this.props.config} to={{interpolate: this.state.opacities}}>
+      //       {props => {
+      //         console.log(props.interpolate)
+      //         return paths.map((val, idx) => (
+      //           <g key={idx}>
+      //             <Gem {... val} fillOpacity={props.interpolate[idx]} ref={ref => this.pathRefs[idx] = ref}/>
+      //           </g>
+      //         ))
+      //       }}
+      //     </Spring>
+      //   </Gemscape>
+      // )
+    } else {
+      return null
     }
+
+
   }
 
-  // const [state, set] = useSpring(() => ({ xy: [0, 0], config: { mass: 10, tension: 550, friction: 140 } }))
-  // const [open, toggle] = useState(true)
-  // const { transform, opacity } = useSpring({
-  //   reverse: open,
-  //   from: { opacity: 0.5, transform: 'scale(1.0)' },
-  //   to: { opacity: 1, transform: 'scale(1.2)' },
-  //   config: { duration: 500 }
-  // })
 
-  let gemscape = null
-  if (props.svg != null) {
-    const svg = props.svg.svg
-    const paths = props.svg.paths
-    const calcCursor = calcCursorFactory()
-    svg.onMouseMove = ({ clientX: x, clientY: y }) => calcCursor(x, y)
-    // svg.onClick = ({ clientX: x, clientY: y }) => calcCursor(x, y)
-
-    let gems = paths.map((val, idx) => {
-      let {fillOpacity, ...otherKeys} = val
-      // if (opacities[idx] != null) {
-      //   fillOpacity = opacities[idx]
-      // }
-      return (<animated.g key={idx}>
-        <Gem key={idx} {...otherKeys} fillOpacity={springs[idx].opacity} ref={ref => pathRefs[idx] = ref}></Gem>
-      </animated.g>)
-    })
-
-    gemscape = (<Gemscape svg={svg} rect={props.svg.rect} g={props.svg.g} ref={gemscapeRef}>
-      {gems}
-    </Gemscape>)
-  }
-
-  return gemscape
 }

@@ -28,8 +28,8 @@ class App extends Component {
   async componentDidMount() {
     let filesList = await getFilesList()
     console.log(`App.componentDidMount: filesList.length=${filesList.length}`)
-    // let initFileName = 'Tralaga_Moo4Den7Gra7Ene7Ens9Mel1Ten7Rhy8.post_wav2png.post_primitive.svg'
-    let initFileName = 'single-shape.svg'
+    let initFileName = 'Tralaga_Moo4Den7Gra7Ene7Ens9Mel1Ten7Rhy8.post_wav2png.post_primitive.svg'
+    // let initFileName = 'single-shape.svg'
     this.setState({
       "fileNames": filesList,
       "currentFileName": initFileName
