@@ -51,7 +51,7 @@ export class ParallaxContainer extends Component {
                   <Slider val={this.state.yVal} onChange={this.handleChange} min={5} max={100} step={5} name="yVal" title="y-direction factor"/>
                 </div>
               </div>
-              <SpringSliders mass={this.state.mass} tension={this.state.tension} friction={this.state.friction} onChange={this.handleChange}/>
+              <SpringSliders mass={this.state.mass} tension={this.state.tension} friction={this.state.friction}  onChange={this.handleChange}/>
             </div>
             <Parallax
               {...this.props}

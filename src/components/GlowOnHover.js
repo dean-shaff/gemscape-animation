@@ -33,7 +33,7 @@ export class GlowOnHoverContainer extends Component {
   }
 
   render(){
-
+    let {scaleFactor, ...config} = this.state
     return (
       <div className="level">
         <div className="level-left">
@@ -48,9 +48,9 @@ export class GlowOnHoverContainer extends Component {
                   <Slider val={this.state.scaleFactor} onChange={this.handleChange} min={1.0} max={2.0} step={0.1} name="scaleFactor" title="Scale Factor"/>
                 </div>
               </div>
-              <SpringSliders mass={this.state.mass} tension={this.state.tension} friction={this.state.friction} onChange={this.handleChange}/>
+              <SpringSliders {...config} onChange={this.handleChange}/>
               <GlowOnHover
-                config={{mass: this.state.mass, tension: this.state.tension, friction:this.state.friction}}
+                config={config}
                 scaleFactor={this.state.scaleFactor}
                 {...this.props}/>
             </div>
