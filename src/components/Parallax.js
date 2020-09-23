@@ -5,21 +5,9 @@ import { useSpring, animated, config } from 'react-spring'
 
 import Gemscape from "./Gemscape.js"
 import Gem from './Gem.js'
+import Slider from './Slider.js'
+import SpringSliders from './SpringSliders.js'
 import { scale, parseGemscapeXML } from './../util.js'
-
-
-const Slider = (props) => {
-  const {title, val, ...otherProps} = props
-
-  return (
-    <div className="field">
-      <label className="label">{title}</label>
-      <input className="slider is-fullwidth has-output" type="range" value={val} {...otherProps}></input>
-      <output>{val}</output>
-    </div>
-  )
-}
-
 
 
 export class ParallaxContainer extends Component {
@@ -63,18 +51,7 @@ export class ParallaxContainer extends Component {
                   <Slider val={this.state.yVal} onChange={this.handleChange} min={5} max={100} step={5} name="yVal" title="y-direction factor"/>
                 </div>
               </div>
-              <div className="columns">
-                <div className="column">
-                  <Slider val={this.state.mass} onChange={this.handleChange} min={1} max={500} step={5} name="mass" title="Mass"/>
-                </div>
-                <div className="column">
-                  <Slider val={this.state.tension} onChange={this.handleChange} min={10} max={1000} step={100} name="tension" title="Tension"/>
-                </div>
-                <div className="column">
-                  <Slider val={this.state.friction} onChange={this.handleChange} min={10} max={500} step={30} name="friction" title="Friction"/>
-                </div>
-              </div>
-
+              <SpringSliders mass={this.state.mass} tension={this.state.tension} friction={this.state.friction} onChange={this.handleChange}/>
             </div>
             <Parallax
               {...this.props}

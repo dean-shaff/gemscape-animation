@@ -129,3 +129,13 @@ export const parseGemscapeXML = function (gemTags) {
     return parsed
   }
 }
+
+export const calcOffset = (pos, len, scaleFactor) =>  {
+  let scale = scaleFactor - 1.0
+  // let offset = -((scaledPos - pos) + (scaledLen - len)/2)
+  // let offset = -(scaledPos - pos)
+  // let offset = (scaledLen - len)/2
+  let offset = pos*scale + len*scale/2
+  offset /= scaleFactor
+  return offset
+}

@@ -28,8 +28,9 @@ class App extends Component {
   async componentDidMount() {
     let filesList = await getFilesList()
     console.log(`App.componentDidMount: filesList.length=${filesList.length}`)
-    let initFileName = 'Tralaga_Moo4Den7Gra7Ene7Ens9Mel1Ten7Rhy8.post_wav2png.post_primitive.svg'
-    // let initFileName = 'single-shape.svg'
+    // let initFileName = "Noodle_Opus_Moo7Den2Gra5Ene2Ens1Mel6Ten2Rhy2.post_wav2png.post_primitive.svg"
+    // let initFileName = 'Tralaga_Moo4Den7Gra7Ene7Ens9Mel1Ten7Rhy8.post_wav2png.post_primitive.svg'
+    let initFileName = 'single-shape.svg'
     this.setState({
       "fileNames": filesList,
       "currentFileName": initFileName
@@ -55,6 +56,10 @@ class App extends Component {
       this.setState({
         'svg': parsed,
         'number': number
+      }, () => {
+        this.setState({
+          'currentFileName': fileName
+        })
       })
     })
   }
@@ -62,9 +67,6 @@ class App extends Component {
   handleChange(evt) {
     const value = evt.target.value
     console.log(`handleChange: ${value}`)
-    this.setState({
-      "currentFileName": value
-    })
     this.loadSVG(value)
   }
 
@@ -129,7 +131,7 @@ class App extends Component {
               </div>
             </div>
             <div className="container">
-              <GlowOnHoverContainer svg={this.state.svg} number={this.state.number}></GlowOnHoverContainer>
+              <GlowOnHoverContainer fileName={this.state.currentFileName} svg={this.state.svg} number={this.state.number}></GlowOnHoverContainer>
               <ParallaxContainer svg={this.state.svg}></ParallaxContainer>
             </div>
           </div>
