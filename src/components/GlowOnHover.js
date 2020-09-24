@@ -17,7 +17,8 @@ export class GlowOnHoverContainer extends Component {
       scaleFactor: 1.1,
       mass: 1,
       tension: 120,
-      friction: 14
+      friction: 14,
+      velocity: 0.0
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -34,6 +35,8 @@ export class GlowOnHoverContainer extends Component {
 
   render(){
     let {scaleFactor, ...config} = this.state
+    // console.log(`GlowOnHoverContainer.render: config=${JSON.stringify(config, null, 2)}`)
+    config.velocity = parseFloat(config.velocity)
     return (
       <div className="level">
         <div className="level-left">
@@ -47,6 +50,10 @@ export class GlowOnHoverContainer extends Component {
                 <div className="column is-one-third">
                   <Slider val={this.state.scaleFactor} onChange={this.handleChange} min={1.0} max={2.0} step={0.1} name="scaleFactor" title="Scale Factor"/>
                 </div>
+                {/*<div className="column is-one-third">
+                  <Slider val={this.state.velocity} onChange={this.handleChange} min={0.0} max={10.0} step={1.0} name="velocity" title="Velocity"/>
+                </div>*/}
+
               </div>
               <SpringSliders {...config} onChange={this.handleChange}/>
               <GlowOnHover
@@ -212,6 +219,7 @@ export class GlowOnHover extends React.Component {
 
 
   render() {
+    // console.log(`GlowOnHover.render: config=${JSON.stringify(this.props.config, null, 2)}`)
     if (this.props.svg != null) {
       const svg = this.props.svg.svg
       const paths = this.props.svg.paths

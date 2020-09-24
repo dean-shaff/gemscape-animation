@@ -18,7 +18,8 @@ export class ParallaxContainer extends Component {
       yVal: 10,
       mass: 1,
       tension: 120,
-      friction: 14
+      friction: 14,
+      velocity: 0.0
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -34,6 +35,8 @@ export class ParallaxContainer extends Component {
   }
 
   render(){
+    let {xVal, yVal, ...config} = this.state
+    config.velocity = parseFloat(config.velocity)
     return (
       <div className="level">
         <div className="level-left">
@@ -51,15 +54,13 @@ export class ParallaxContainer extends Component {
                   <Slider val={this.state.yVal} onChange={this.handleChange} min={5} max={100} step={5} name="yVal" title="y-direction factor"/>
                 </div>
               </div>
-              <SpringSliders mass={this.state.mass} tension={this.state.tension} friction={this.state.friction}  onChange={this.handleChange}/>
+              <SpringSliders {...config} onChange={this.handleChange}/>
             </div>
             <Parallax
               {...this.props}
-              xVal={this.state.xVal}
-              yVal={this.state.yVal}
-              mass={this.state.mass}
-              tension={this.state.tension}
-              friction={this.state.friction}>
+              xVal={xVal}
+              yVal={yVal}
+              config={config}>
             </Parallax>
           </div>
         </div>
@@ -92,14 +93,11 @@ export  function Parallax (props) {
       return translateStr
     }
   }
-  const configObj = {
-    mass: props.mass, tension: props.tension, friction: props.friction
-  }
 
-  console.log(`Parallax: mass=${props.mass} tension=${props.tension} friction=${props.friction}`)
-  const [state, set] = useSpring(() => ({ xy: [0, 0], config: configObj }))
+  // console.log(`Parallax: mass=${props.mass} tension=${props.tension} friction=${props.friction}`)
+  const [state, set] = useSpring(() => ({ xy: [0, 0], config: props.config }))
   set({
-    'config': configObj
+    'config': props.config
   })
   // const [state, set] = useSpring(() => ({ xy: [0, 0], config: config.molasses }))
   // const [state, set] = useSpring(() => ({ xy: [0, 0], config: config.gentle }))

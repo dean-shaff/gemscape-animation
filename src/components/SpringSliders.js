@@ -14,9 +14,9 @@ const SpringSliders = (props) => {
       <div className="column">
         <Slider val={props.friction} onChange={props.onChange} min={1} max={200} step={5} name="friction" title="Friction"/>
       </div>
-      {/*<div className="column">
-        <Slider val={props.velocity} onChange={props.onChange} min={0} max={10} step={1} name="velocity" title="Velocity"/>
-      </div>*/}
+      <div className="column">
+        <Slider val={props.velocity} onChange={props.onChange} min={0} max={25} step={1} name="velocity" title="Velocity"/>
+      </div>
     </div>
   )
 }
