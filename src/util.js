@@ -66,6 +66,25 @@ export const scale = function(domain, range) {
   }
 }
 
+/**
+ *
+ * @param  {[type]} paths array of path objects, as returned from parseGemscapeXML
+ * @return {[type]}       [description]
+ */
+export const sortIntoLayers = function (paths) {
+  let layers = {}
+  for (let idx=0; idx<paths.length; idx++) {
+    let path = paths[idx]
+    let layer = path.layer
+    if (layers[layer] === undefined) {
+      layers[layer] = [path]
+    } else {
+      layers[layer].push(path)
+    }
+  }
+  return layers
+}
+
 
 export const parseGemscapeXML = function (gemTags) {
   if (gemTags == null) {
@@ -123,6 +142,8 @@ export const parseGemscapeXML = function (gemTags) {
         '__fillOpacity': get(path, 'fill-opacity'),
         'fill': get(path, 'fill'),
         '__fill': get(path, 'fill'),
+        'layer': get(path, 'layer'),
+        'label': get(path, 'label'),
         'type': path.tagName
       })
     }

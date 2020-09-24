@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import { ParallaxContainer } from "./components/Parallax.js"
+import { ParallaxContainer, ParallaxByLayer, Parallax } from "./components/Parallax.js"
 import { GlowOnHoverContainer } from "./components/GlowOnHover.js"
 import { getFilesList, getSVG, parseGemscapeXML } from "./util.js"
 
@@ -28,12 +28,12 @@ class App extends Component {
   async componentDidMount() {
     let filesList = await getFilesList()
     console.log(`App.componentDidMount: filesList.length=${filesList.length}`)
-    // let initFileName = "Dawn_Line_Approaching_Moo0Den6Gra9Ene1Ens6Mel4Ten9Rhy5.post_wav2png.post_primitive.svg"
+    let initFileName = "Dawn_Line_Approaching_Moo0Den6Gra9Ene1Ens6Mel4Ten9Rhy5.post_wav2png.post_primitive.svg"
     // let initFileName = "Arizona_Moon_Moo8Den8Gra3Ene6Ens6Mel8Ten2Rhy8.post_wav2png.post_primitive.svg"
     // let initFileName = "Cicle_Vascule_Moo3Den7Gra6Ene7Ens9Mel8Ten7Rhy7.post_wav2png.post_primitive.svg"
     // let initFileName = "Noodle_Opus_Moo7Den2Gra5Ene2Ens1Mel6Ten2Rhy2.post_wav2png.post_primitive.svg"
     // let initFileName = 'Tralaga_Moo4Den7Gra7Ene7Ens9Mel1Ten7Rhy8.post_wav2png.post_primitive.svg'
-    let initFileName = 'single-shape.svg'
+    // let initFileName = 'single-shape.svg'
     this.setState({
       "fileNames": filesList,
       "currentFileName": initFileName
@@ -134,8 +134,9 @@ class App extends Component {
               </div>
             </div>
             <div className="container">
-              <GlowOnHoverContainer fileName={this.state.currentFileName} svg={this.state.svg} number={this.state.number}></GlowOnHoverContainer>
-              <ParallaxContainer svg={this.state.svg}></ParallaxContainer>
+              <ParallaxContainer svg={this.state.svg} component={ParallaxByLayer} title={"Parallax By Layer"}/>
+              <ParallaxContainer svg={this.state.svg} component={Parallax} title={"Parallax"}/>
+              <GlowOnHoverContainer fileName={this.state.currentFileName} svg={this.state.svg} number={this.state.number}/>
             </div>
           </div>
         </section>

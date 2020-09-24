@@ -1,7 +1,8 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" height="280" preserveAspectRatio="none" version="1.1" width="930">
 <rect fill="none" height="280" width="1024" x="0" y="0" />
-<g transform="scale(4.0000) translate(-11.13636363636364, 0.5)">
+<!-- <g transform="scale(4.0000) translate(-11.13636363636364, 0.5)"> -->
+<g transform="scale(4.0000)">
   <path d="M 125.68 31.55 Q 126.86 32.48, 126.11 33.78 L 120.90 42.83 Q 120.15 44.13, 119.05 45.15 L 111.42 52.28 Q 110.32 53.30, 109.56 52.01 L 104.78 43.94 Q 104.02 42.65, 103.71 41.18 L 101.75 32.02 Q 101.44 30.55, 100.96 29.13 L 99.68 25.37 Q 99.20 23.95, 99.58 22.50 L 100.57 18.65 Q 100.95 17.20, 102.33 17.79 L 113.54 22.53 Q 114.92 23.12, 116.10 24.05 L 125.68 31.55" fill="#6187ac" fill-opacity="0.803922" label="middle" layer="1"></path>
 </g>
 </svg>
