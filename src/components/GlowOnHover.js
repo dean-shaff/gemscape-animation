@@ -1,7 +1,7 @@
 import React,  { Component, useRef, useState } from "react"
 import ReactDOM from 'react-dom'
 
-import { Spring } from 'react-spring/renderprops'
+import { Spring, animated } from 'react-spring/renderprops'
 
 import Gemscape from "./Gemscape.js"
 import Gem from './Gem.js'

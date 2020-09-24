@@ -108,14 +108,14 @@ export  function Parallax (props) {
   if (props.svg != null) {
     let svg = props.svg.svg
     const calcCursor = calcCursorFactory()
-    const xValScale = scale([0, props.svg.paths.length], [-1/props.xVal, 1/props.xVal])
-    const yValScale = scale([0, props.svg.paths.length], [-1/props.yVal, 1/props.yVal])
+    const xValScale = scale([0, props.svg.paths.length + 1], [-1/props.xVal, 1/props.xVal])
+    const yValScale = scale([0, props.svg.paths.length + 1], [-1/props.yVal, 1/props.yVal])
 
     svg.onMouseMove = ({ clientX: x, clientY: y }) => set({ xy: calcCursor(x, y) })
     gemscape = (<Gemscape svg={svg} rect={props.svg.rect} g={props.svg.g} ref={gemscapeRef}>
       {props.svg.paths.map((val, idx) =>
         <animated.g key={idx} transform={state.xy.interpolate(calcTransformFactory(xValScale(idx), yValScale(idx)))}>
-          <Gem key={idx} {...val}></Gem>
+          <Gem key={idx} {...val}/>
         </animated.g>
       )}
     </Gemscape>)
