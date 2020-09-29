@@ -134,9 +134,9 @@ class App extends Component {
               </div>
             </div>
             <div className="container">
+              <GlowOnHoverContainer fileName={this.state.currentFileName} svg={this.state.svg} number={this.state.number}/>
               <ParallaxContainer svg={this.state.svg} component={ParallaxByLayer} title={"Parallax By Layer"}/>
               <ParallaxContainer svg={this.state.svg} component={Parallax} title={"Parallax"}/>
-              <GlowOnHoverContainer fileName={this.state.currentFileName} svg={this.state.svg} number={this.state.number}/>
             </div>
           </div>
         </section>

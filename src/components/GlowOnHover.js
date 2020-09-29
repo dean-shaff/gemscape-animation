@@ -7,7 +7,7 @@ import Gemscape from "./Gemscape.js"
 import Gem from './Gem.js'
 import SpringSliders from './SpringSliders.js'
 import Slider from './Slider.js'
-import { scale, parseGemscapeXML, calcOffset } from './../util.js'
+import { scale, parseGemscapeXML, calcOffset, calcDist } from './../util.js'
 
 
 export class GlowOnHoverContainer extends Component {
@@ -50,16 +50,13 @@ export class GlowOnHoverContainer extends Component {
                 <div className="column is-one-third">
                   <Slider val={this.state.scaleFactor} onChange={this.handleChange} min={1.0} max={2.0} step={0.1} name="scaleFactor" title="Scale Factor"/>
                 </div>
-                {/*<div className="column is-one-third">
-                  <Slider val={this.state.velocity} onChange={this.handleChange} min={0.0} max={10.0} step={1.0} name="velocity" title="Velocity"/>
-                </div>*/}
-
               </div>
               <SpringSliders {...config} onChange={this.handleChange}/>
-              <GlowOnHover
+              <OpacityOnHover config={config}/>
+              {/*<GlowOnHover
                 config={config}
                 scaleFactor={this.state.scaleFactor}
-                {...this.props}/>
+                {...this.props}/>*/}
             </div>
           </div>
         </div>
@@ -75,9 +72,14 @@ class OpacityOnHover extends React.Component {
     super(props)
     this.state = {
       toggle: true,
-      opacity: 1
+      opacity: 1.0,
+      dx: 0,
+      dy: 0,
+      std: 1.0,
+      scaleFactor: 5.0
     }
     this.ref = React.createRef()
+    this.polygonRef = React.createRef()
     this.toggle = this.toggle.bind(this)
   }
 
@@ -88,25 +90,78 @@ class OpacityOnHover extends React.Component {
   }
 
   render() {
-    if (this.props.svg != null) {
-      const onMouseMove = ({ clientX: x, clientY: y }) => {
-        this.setState({
-          'opacity': x / this.ref.current.offsetWidth
-        })
-      }
+    const onMouseMove = ({ clientX: x, clientY: y }) => {
+      const bbox = this.polygonRef.current.getBBox()
+      const svg = this.ref.current
+      let point = svg.createSVGPoint()
+      point.x = x
+      point.y = y
+      point = point.matrixTransform(svg.getScreenCTM().inverse())
+      // console.log(point)
+      // let [xOffset, yOffset] = [
+      //   calcOffset(bbox.x, bbox.width, this.state.scaleFactor),
+      //   calcOffset(bbox.y, bbox.height, this.state.scaleFactor),
+      // ]
+      let xOffset = (bbox.x + bbox.width/2)*this.state.scaleFactor
+      let yOffset = (bbox.y + bbox.height/2)*this.state.scaleFactor
 
-      return (
-        <div ref={this.ref} onMouseMove={onMouseMove} className="title">
-          <Spring
-            from={{ opacity: 0 }}
-            to={{ opacity: this.state.opacity }}
-            config={this.props.config}>
-            {props => <div style={props}>Hello</div>}
-          </Spring>
-        </div>
-      )
+      let dist = calcDist([point.x, point.y], [xOffset, yOffset])
+
+
+      this.setState({
+        dx: -(point.x - xOffset)/20,
+        dy: -(point.y - yOffset)/20,
+        std: (dist + 0.5) / 200
+      })
     }
-    return null
+
+    const onClick = ({ clientX: x, clientY: y }) => {
+      let newOpacity = 0.0
+      if (this.state.opacity === 0.0) {
+        newOpacity = 1.0
+      }
+      this.setState({
+        'opacity': newOpacity
+      })
+    }
+
+    return (
+      <div onClick={onClick} onMouseMove={onMouseMove}>
+        <svg ref={this.ref} width="930" height="300">
+          <defs>
+            <filter id="shadow" height="300%" width="300%" x="-50%" y="-50%">
+              <Spring
+                from={{ opacity: 0.0, dx: 0, dy: 0, std: 0.0}}
+                to={{ opacity: 1.0, dx: this.state.dx, dy: this.state.dy, std: this.state.std }}
+                config={this.props.config}>
+                {props => (
+                  <feDropShadow dx={props.dx} dy={props.dy} stdDeviation={props.std} floodOpacity={props.opacity}/>
+                )}
+              </Spring>
+            </filter>
+          </defs>
+          <g transform={`scale(${this.state.scaleFactor})`}>
+            <polygon fill="#6c6ba9" fillOpacity={this.state.opacity} points="100,20,140,20,140,60,100,60" />
+            <Spring
+              from={{ opacity: 0.0}}
+              to={{ opacity: this.state.opacity }}
+              config={this.props.config}>
+              {props => (
+                  <path ref={this.polygonRef} filter="url(#shadow)" fillOpacity={props.opacity} d="M 125.68 31.55 Q 126.86 32.48, 126.11 33.78 L 120.90 42.83 Q 120.15 44.13, 119.05 45.15 L 111.42 52.28 Q 110.32 53.30, 109.56 52.01 L 104.78 43.94 Q 104.02 42.65, 103.71 41.18 L 101.75 32.02 Q 101.44 30.55, 100.96 29.13 L 99.68 25.37 Q 99.20 23.95, 99.58 22.50 L 100.57 18.65 Q 100.95 17.20, 102.33 17.79 L 113.54 22.53 Q 114.92 23.12, 116.10 24.05 L 125.68 31.55" fill="#6187ac" label="middle" layer="1"></path>
+
+              )}
+            </Spring>
+
+          </g>
+        {/*<Spring
+          from={{ opacity: 0 }}
+          to={{ opacity: this.state.opacity }}
+          config={this.props.config}>
+          {props => <div style={props}>Hello</div>}
+        </Spring>*/}
+        </svg>
+      </div>
+    )
   }
 }
 
