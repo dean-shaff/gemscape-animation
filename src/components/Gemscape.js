@@ -7,6 +7,7 @@ class Gemscape extends Component {
     const {rect, g, svg, ...otherKeys} = this.props
     return (
       <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" version="1.1" {...svg} ref={(svg) => this.svg = svg}>
+        {this.props.defs}
         <rect {...rect}/>
         <g {...g}>
           {this.props.children}

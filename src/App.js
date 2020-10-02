@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 
 import { ParallaxContainer, ParallaxByLayer, Parallax } from "./components/Parallax.js"
-import { GlowOnHoverContainer } from "./components/GlowOnHover.js"
+import { GlowOnHoverContainer, GlowOnHover } from "./components/GlowOnHover"
 import { getFilesList, getSVG, parseGemscapeXML } from "./util.js"
 
 import "./App.css"
@@ -28,6 +28,7 @@ class App extends Component {
   async componentDidMount() {
     let filesList = await getFilesList()
     console.log(`App.componentDidMount: filesList.length=${filesList.length}`)
+    // let initFileName = 'Beignet_Interlude_Moo6Den0Gra1Ene3Ens0Mel9Ten5Rhy5.post_wav2png.post_primitive.svg'
     let initFileName = "Dawn_Line_Approaching_Moo0Den6Gra9Ene1Ens6Mel4Ten9Rhy5.post_wav2png.post_primitive.svg"
     // let initFileName = "Arizona_Moon_Moo8Den8Gra3Ene6Ens6Mel8Ten2Rhy8.post_wav2png.post_primitive.svg"
     // let initFileName = "Cicle_Vascule_Moo3Den7Gra6Ene7Ens9Mel8Ten7Rhy7.post_wav2png.post_primitive.svg"
@@ -134,7 +135,7 @@ class App extends Component {
               </div>
             </div>
             <div className="container">
-              <GlowOnHoverContainer fileName={this.state.currentFileName} svg={this.state.svg} number={this.state.number}/>
+              <GlowOnHoverContainer component={GlowOnHover} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
               <ParallaxContainer svg={this.state.svg} component={ParallaxByLayer} title={"Parallax By Layer"}/>
               <ParallaxContainer svg={this.state.svg} component={Parallax} title={"Parallax"}/>
             </div>

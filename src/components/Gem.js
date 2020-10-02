@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 
+// import { animated } from 'react-spring'
+
 class Gem extends Component {
   render() {
     const {data, type, __fillOpacity, ...otherProps} = this.props
