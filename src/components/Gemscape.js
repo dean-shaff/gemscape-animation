@@ -12,6 +12,7 @@ class Gemscape extends Component {
         <g {...g}>
           {this.props.children}
         </g>
+        {this.props.supplemental}
       </svg>
     )
   }

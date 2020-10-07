@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom'
 import { Spring } from 'react-spring/renderprops'
 import { useSprings, animated } from 'react-spring'
 
+import convert from 'color-convert'
+
 import Gemscape from "./../Gemscape.js"
 import Gem from './../Gem.js'
 import { calcOffset } from './../../util.js'
+
+import './GlowOnHover.alt.css'
 
 const AnimatedGem = animated(Gem)
 const AnimatedFeDropShadow = animated('feDropShadow')
@@ -28,7 +32,16 @@ const calcOpacity = (cursor, ref, path, idx) => {
   let fillOpacity = parseFloat(path['__fillOpacity'])
   let inside = ref.isPointInFill(cursor)
   if (inside) {
-    return fillOpacity * 1.5
+    // let returnVal = fillOpacity * 1.5
+    // if (returnVal > 1.0) {
+    //   returnVal = 1.0
+    // }
+    // let returnVal = Math.sqrt(fillOpacity)
+    let returnVal = 0.5 + 0.5*Math.sqrt(2*fillOpacity)
+    if (fillOpacity < 0.5) {
+      returnVal = fillOpacity
+    }
+    return returnVal
   } else {
     return fillOpacity
   }
@@ -62,7 +75,8 @@ const calcAttributeFactory = (gemscapeRef, pathRefs, parsedPaths) => {
   // console.log(`calcAttributeFactory: pathRefs=${JSON.stringify(pathRefs)}`)
   return (cb) => {
     return (x, y) => {
-      const svg = gemscapeRef.current.svg
+      // const svg = gemscapeRef.current.svg
+      const svg = gemscapeRef.current
       const pathRefsFiltered = pathRefs.filter(ref => ref != null).map(ref => ref.path)
       let point = svg.createSVGPoint()
       point.x = x
@@ -94,14 +108,12 @@ const GlowOnHover = (props) => {
   const calcOpacityRef = useRef(null)
   const calcTransformRef = useRef(null)
   const calcFilterOpacityRef = useRef(null)
-  // const calcBlurRef = useRef(null)
   const calcInsideRef = useRef(null)
 
   const pathRefs = []
 
   const [fills, setFills] = useState([])
 
-  // const [springs, set, stop] = useSprings(props.number, idx => ({'fillOpacity': 1, blur: 0, 'config': props.config}))
   const [springs, set, stop] = useSprings(props.number, idx => ({'fillOpacity': 1, 'filterOpacity': 0, 'config': props.config}))
 
   useEffect(() => {
@@ -111,7 +123,14 @@ const GlowOnHover = (props) => {
     }
     const fills = props.parsedSVG.paths.map(p => p.fill)
     setFills(fills)
+
+    // console.log(fills.map(fill => convert.hex.hsl(fill)))
+
+    const opacities = props.parsedSVG.paths.map(p => p['__fillOpacity'])
+    set(idx => ({'fillOpacity': parseFloat(opacities[idx])}))
+    console.log(opacities)
   }, [props.parsedSVG])
+
 
   useEffect(() => {
     calcAttributeRef.current = null
@@ -139,21 +158,7 @@ const GlowOnHover = (props) => {
       calcAttributeRef.current = calcAttributeFactory(gemscapeRef, pathRefs, props.parsedSVG.paths)
       calcOpacityRef.current = calcAttributeRef.current(calcOpacity)
       calcFilterOpacityRef.current = calcAttributeRef.current(calcFilterOpacity)
-      // calcBlurRef.current = calcAttributeRef.current(calcBlur)
-      // calcInsideRef.current = calcAttributeRef.current(calcInside)
-      // init(gemscapeRef, pathRefs, props.parsedSVG.paths)
     }
-    // const lastInside = props.number - 1 - calcInsideRef.current(x, y).reverse().findIndex(val => val)
-    // set(idx => {
-    //   const path = props.parsedSVG.paths[idx]
-    //   let fillOpacity = parseFloat(path.fillOpacity)
-    //   let blur = 0.0
-    //   if (idx === lastInside) {
-    //     fillOpacity *= 1.5
-    //     blur = 2.0
-    //   }
-    //   return {'fillOpacity': fillOpacity, 'config': props.config, 'blur': blur}
-    // })
 
     const defaults = getDefault(props.parsedSVG.paths)
     let opacities = calcOpacityRef.current(x, y)
@@ -164,11 +169,6 @@ const GlowOnHover = (props) => {
     if (filterOpacities === null) {
       filterOpacities = defaults[2]
     }
-    // let blurs = calcBlurRef.current(x, y)
-    // if (blurs === null) {
-    //   blurs = defaults[0]
-    // }
-    // set(idx => ({'fillOpacity': opacities[idx], 'blur': blurs[idx], 'config': props.config}))
     set(idx => ({'fillOpacity': opacities[idx], 'filterOpacity': filterOpacities[idx], 'config': props.config}))
   }
 
@@ -177,65 +177,61 @@ const GlowOnHover = (props) => {
   if (parsed === null) {
     return null
   } else {
-    // return (
-    //   <div onMouseMove={onMouseMove}>
-    //     {/*{springs.map((prop, idx) => <animated.div key={idx}>{prop.opacity}</animated.div>)}*/}
-    //     {springs.map((props, idx) => {
-    //       let result = props.opacity.interpolate(o => o)
-    //       return (<animated.div key={idx}>{props.opacity.interpolate(o => o)}</animated.div>)
-    //     })}
-    //   </div>
-    // )
     parsed.svg.onMouseMove = onMouseMove
     // parsed.svg.onClick = onMouseMove
-    // const defs = springs.map((props, idx) => (
-    //   <filter key={`shadow-${idx}`} id={`shadow-${idx}`} height="300%" width="300%" x="-50%" y="-50%">
-    //     <AnimatedFeDropShadow dx={0} dy={0} stdDeviation={2} floodOpacity={props.fillOpacity} floodColor={fills[idx]}/>
-    //   </filter>
-    // ))
-    const defs = null
+    // let images = []
+    // for (let idx=0; idx<5; idx++) {
+    //   let path = `assets/Cicle_Vascule.5/gem.${idx}.svg`
+    //   // images.push((
+    //   //   <div key={idx}>
+    //   //     <img className="image-item" src={path}/>
+    //   //   </div>
+    //   // ))
+    //   images.push((
+    //     <image key={idx} href={path}/>
+    //   ))
+    // }
+
+    // const images = springs.map((props, idx) => {
+    //   let path = `assets/Cicle_Vascule.5/gem.${idx}.svg`
+    //   const filterOpacityInterp = props.filterOpacity.interpolate([0, 1], [0, 1])
+    //   return (
+    //     <animated.image key={idx} href={path} style={{'opacity': filterOpacityInterp}}/>
+    //   )
+    // })
 
     return (
-      <Gemscape svg={parsed.svg} rect={parsed.rect} g={parsed.g} ref={gemscapeRef} defs={defs}>
+      <div>
+      <svg {...parsed.svg} ref={gemscapeRef}>
+        <rect {...parsed.rect}/>
         {springs.map((props, idx) => {
-          // const {blur, fillOpacity, ...rest} = props
-          // const filter = blur.interpolate(b => {
-          //   // if (b === 0.0) {
-          //   //   return null
-          //   // }
-          //   if (b < 0) {
-          //     b = 0.0
-          //   }
-          //   return `drop-shadow(0px 0px ${b}px ${fills[idx]})`
-          // })
+          const path = `assets/Cicle_Vascule.5/gem.${idx}.svg`
           const {filterOpacity, fillOpacity, ...rest} = props
           const filterOpacityInterp = filterOpacity.interpolate([0, 1], [0, 1])
           const fillOpacityInterp = fillOpacity.interpolate([0, 1], [0, 1])
-          // const filter = null
-          // const filter=`drop-shadow(0px 0px 2px ${fills[idx]})`
-          // const fillOpacityInterp = fillOpacity.interpolate(f => {
-          //   if (f < 0) {
-          //     f = 0
-          //   } else if (f > 1) {
-          //     f = 1
-          //   }
-          //   return f
-          // })
-          // const filter = blur.interpolate(f => {
-          //   return `drop-shadow(0px 0px 5px ${fills[idx]})`
-          // })
-          //
           return (
             <g key={idx}>
-              <g>
+              {/*<animated.image key={idx} href={path} style={{'opacity': filterOpacityInterp}}/>*/}
+              <g {...parsed.g}>
                 <AnimatedGem {...parsed.paths[idx]} ref={ref => pathRefs[idx] = ref} fillOpacity={fillOpacityInterp} {...rest}/>
               </g>
-              <animated.g fillOpacity={filterOpacityInterp}>
-                <AnimatedGem {...parsed.paths[idx]} {...rest} filter={`drop-shadow(0px 0px 2px ${fills[idx]})`}/>
-              </animated.g>
             </g>
         )})}
-      </Gemscape>
+      </svg>
+      {/*<Gemscape svg={parsed.svg} rect={parsed.rect} g={parsed.g} ref={gemscapeRef} supplemental={images}>
+        {springs.map((props, idx) => {
+          const {filterOpacity, fillOpacity, ...rest} = props
+          const filterOpacityInterp = filterOpacity.interpolate([0, 1], [0, 1])
+          const fillOpacityInterp = fillOpacity.interpolate([0, 1], [0, 1])
+          return (
+            <g key={idx}>
+              <AnimatedGem {...parsed.paths[idx]} ref={ref => pathRefs[idx] = ref} fillOpacity={fillOpacityInterp} {...rest}/>
+            </g>
+        )})}
+      </Gemscape>*/}
+      {/*<svg {...parsed.svg}>
+      </svg>*/}
+      </div>
     )
   }
 }

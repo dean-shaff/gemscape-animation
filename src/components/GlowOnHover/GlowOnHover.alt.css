@@ -1,0 +1,17 @@
+.image-container {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.image-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.image-item:first {
+  position: relative;
+  top: 0;
+  left: 0;
+}

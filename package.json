@@ -19,11 +19,13 @@
     "d3": "^5.16.0",
     "express": "^4.17.1",
     "framer-motion": "^2.6.13",
+    "hsluv": "^0.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-spring": "^8.0.27",
     "style-loader": "^1.2.1",
-    "webpack": "^4.44.1"
+    "webpack": "^4.44.1",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@babel/cli": "^7.11.6",

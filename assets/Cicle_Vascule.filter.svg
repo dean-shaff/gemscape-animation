@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="280" preserveAspectRatio="none" version="1.1" width="930">
+<rect fill="none" height="280" width="1024" x="0" y="0" />
+<g transform="scale(4.0000) translate(-11.13636363636364, 0.5)">
+<polygon filter="drop-shadow(0px 0px 2px #dcd06c)" fill="#dcd06c" fill-opacity="0.807843" label="outline" layer="0" points="64.145054,3.655960,226.903184,40.068524,64.145054,56.146965,24.404108,40.068524" />
+<polygon filter="drop-shadow(0px 0px 2px #bcb05d)" fill="#bcb05d" fill-opacity="0.870588" label="outline" layer="0" points="214.642539,0.703390,147.928854,1.781043,145.831573,69.000000,242.800883,62.599548" />
+<polygon filter="drop-shadow(0px 0px 2px #bcb85d)" fill="#bcb85d" fill-opacity="0.827451" label="outline" layer="0" points="82.982138,-0.000000,122.274757,63.000000,82.982138,69.000000,45.441916,63.000000" />
+<polygon filter="drop-shadow(0px 0px 2px #bab15b)" fill="#bab15b" fill-opacity="0.717647" label="outline" layer="0" points="49,0 49,69 117,4" />
+<polygon filter="drop-shadow(0px 0px 2px #b8b25b)" fill="#b8b25b" fill-opacity="0.623529" label="outline" layer="0" points="13,19 13,50 130,33" />
+<polygon filter="drop-shadow(0px 0px 2px #ceb966)" fill="#ceb966" fill-opacity="0.584314" label="middle" layer="1" points="201.514827,-0.000000,161.860602,30.006038,201.514827,69.000000,241.227773,30.006038" />
+<polygon filter="drop-shadow(0px 0px 2px #c3cc64)" fill="#c3cc64" fill-opacity="0.596078" label="middle" layer="1" points="105.206642,-0.000000,116.675374,6.000000,105.206642,69.000000,94.415895,6.000000" />
+<polygon filter="drop-shadow(0px 0px 2px #bab15c)" fill="#bab15c" fill-opacity="0.576471" label="middle" layer="1" points="239.861267,33.481132,214.684144,69.000000,161.078082,67.953284,146.259992,0.000000" />
+<polygon filter="drop-shadow(0px 0px 2px #bdbb5e)" fill="#bdbb5e" fill-opacity="0.639216" label="middle" layer="1" points="61.048355,69.000000,113.072653,67.414638,114.944252,3.673497,66.866387,0.000000" />
+<polygon filter="drop-shadow(0px 0px 2px #bea458)" fill="#bea458" fill-opacity="0.517647" label="middle" layer="1" points="228.120389,6.795392,237.441250,36.022247,228.120389,49.612420,223.259948,36.022247" />
+<polygon filter="drop-shadow(0px 0px 2px #c2bf61)" fill="#c2bf61" fill-opacity="0.486275" label="middle" layer="1" points="12.034520,42.748836,63.448835,34.723794,12.034520,26.839422,12.034520,34.723794" />
+<polygon filter="drop-shadow(0px 0px 2px #8a5d42)" fill="#8a5d42" fill-opacity="0.376471" label="middle" layer="1" points="123.235830,17.733649,112.491889,34.136236,119.163692,58.846504,151.766869,26.267421" />
+<polygon filter="drop-shadow(0px 0px 2px #b89e56)" fill="#b89e56" fill-opacity="0.443137" label="middle" layer="1" points="46.552510,7.144314,46.552510,37.452825,46.552510,59.040961,64.930973,37.452825" />
+<polygon filter="drop-shadow(0px 0px 2px #c2b260)" fill="#c2b260" fill-opacity="0.666667" label="middle" layer="1" points="170.964742,60.086212,235.099938,44.006939,234.711504,21.890153,109.847139,28.457001" />
+<polygon filter="drop-shadow(0px 0px 2px #bdba5f)" fill="#bdba5f" fill-opacity="0.690196" label="middle" layer="1" points="86.512751,15.865196,114.104207,0.000000,114.139790,68.130847,65.307521,60.153698" />
+<polygon filter="drop-shadow(0px 0px 2px #bfbb5f)" fill="#bfbb5f" fill-opacity="0.815686" label="detail" layer="2" points="147.569694,54.692293,151.842622,12.060191,215.597427,8.891008,155.134650,62.168293" />
+<polygon filter="drop-shadow(0px 0px 2px #7d703b)" fill="#7d703b" fill-opacity="0.521569" label="detail" layer="2" points="52.708363,40.547189,78.090666,58.973503,52.708363,64.973503,49.886933,58.973503" />
+<polygon filter="drop-shadow(0px 0px 2px #bfb95f)" fill="#bfb95f" fill-opacity="0.729412" label="detail" layer="2" points="63.383776,19.173391,90.153115,3.508504,132.008293,38.468134,62.496906,69.000000" />
+<polygon filter="drop-shadow(0px 0px 2px #84673c)" fill="#84673c" fill-opacity="0.423529" label="detail" layer="2" points="232.647898,44.419181,216.064034,7.969827,213.343643,35.819220,217.039360,63.922343" />
+<polygon filter="drop-shadow(0px 0px 2px #c6b163)" fill="#c6b163" fill-opacity="0.588235" label="detail" layer="2" points="183,4 183,65 238,34" />
+</g>
+</svg>

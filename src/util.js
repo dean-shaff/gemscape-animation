@@ -144,6 +144,7 @@ export const parseGemscapeXML = function (gemTags) {
         '__fill': get(path, 'fill'),
         'layer': get(path, 'layer'),
         'label': get(path, 'label'),
+        'fill-hsl': get(path, 'fill-hsl'),
         'type': path.tagName
       })
     }
