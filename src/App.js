@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import { ParallaxContainer, ParallaxByLayer, Parallax } from "./components/Parallax.js"
+import { ParallaxContainer, ParallaxByLayer, Parallax } from "./components/Parallax"
 import { GlowOnHoverAlt, BrightnessSandbox } from "./components/GlowOnHover"
 import AnimationContainer from './components/AnimationContainer.js'
 import AnimationContainerWithSliders from './components/AnimationContainerWithSliders.js'
@@ -143,8 +143,8 @@ class App extends Component {
                 <BrightnessSandbox parsedSVG={this.state.svg} number={this.state.number}/>
               </AnimationContainer>
               <AnimationContainerWithSliders title="GlowOnHover" component={GlowOnHoverAlt} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
-              <ParallaxContainer svg={this.state.svg} component={ParallaxByLayer} title={"Parallax By Layer"}/>
-              <ParallaxContainer svg={this.state.svg} component={Parallax} title={"Parallax"}/>
+              <ParallaxContainer parsedSVG={this.state.svg} component={ParallaxByLayer} title="Parallax By Layer"/>
+              <ParallaxContainer parsedSVG={this.state.svg} component={Parallax} title="Parallax"/>
             </div>
           </div>
         </section>
