@@ -139,7 +139,7 @@ export const parseGemscapeXML = function (gemTags) {
       parsed.paths.push({
         'data': data,
         'fillOpacity': get(path, 'fill-opacity'),
-        '__fillOpacity': get(path, 'fill-opacity'),
+        '__fillopacity': get(path, 'fill-opacity'),
         'fill': get(path, 'fill'),
         '__fill': get(path, 'fill'),
         'layer': get(path, 'layer'),

@@ -1,10 +1,9 @@
 import React, { Component } from "react"
 
-// import { animated } from 'react-spring'
 
 class Gem extends Component {
   render() {
-    const {data, type, __fillOpacity, ...otherProps} = this.props
+    const {data, type, ...otherProps} = this.props
     // console.log(`Gem: style=${JSON.stringify(style, null, 2)}`)
     // console.log(`Gem: transform=${otherProps.transform}`)
     // console.log(`Gem: fillOpacity=${otherProps.fillOpacity}`)

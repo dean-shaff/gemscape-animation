@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" height="280" preserveAspectRatio="none" version="1.1" width="930">
+  <rect fill="none" height="280" width="1024" x="0" y="0"/>
+  <g transform="scale(4.0000) translate(-11.13636363636364, 0.5)">
+    <path d="M 40.00 12.00 L 39.43 18.97 L 40.69 20.62 L 39.79 34.87 L 39.78 36.42 L 39.72 43.74 L 40.00 57.00 L 40.00 57.00 L 52.28 49.84 L 55.49 46.98 L 58.67 45.71 L 71.68 36.43 L 72.95 35.67 L 77.51 32.49 L 79.03 31.11 L 89.15 25.16 L 97.00 20.00 L 97.00 20.00 L 90.42 18.88 L 86.91 18.81 L 82.85 17.52 L 70.36 16.47 L 66.09 15.47 L 65.83 15.04 L 56.98 14.48 L 40.00 12.00 " fill="#589599" fill-opacity="0.431373" label="outline" layer="0" filter="drop-shadow(0px 0px 5px #589599)"/>
+  </g>
+</svg>

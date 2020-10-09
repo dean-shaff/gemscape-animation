@@ -6,8 +6,8 @@ const fs = require('fs')
 const convert = require('color-convert')
 const xml2js = require('xml2js')
 
-const assetsDir = path.join(path.dirname(__dirname), 'assets')
-const fileName = 'Cicle_Vascule.5.svg'
+// const assetsDir = path.join(path.dirname(__dirname), 'assets')
+// const fileName = 'Cicle_Vascule.5.svg'
 
 const decomposeSVG = async (filePath, outputDir) => {
   if (! fs.existsSync(outputDir)) {
@@ -19,20 +19,25 @@ const decomposeSVG = async (filePath, outputDir) => {
   const contents = fs.readFileSync(filePath, 'utf8')
   const parsed = await xml2js.parseStringPromise(contents)
   const common = JSON.parse(JSON.stringify(parsed))
-  const polygons = common.svg.g[0].polygon
-  delete common.svg.g[0].polygon
+  let tag = 'polygon'
+  if (common.svg.g[0][tag] === undefined) {
+    tag = 'path'
+  }
+  const gems = common.svg.g[0][tag]
+  common.svg.g.splice(1, 1)
+  console.log(common.svg.g)
 
-  for (let idx=0; idx<polygons.length; idx++) {
+  for (let idx=0; idx<gems.length; idx++) {
     let gemFilePath = path.join(outputDir, `gem.${idx}.svg`)
     let gemObj = Object.assign({}, common)
-    let polygon = polygons[idx]
+    let polygon = gems[idx]
     let fill = polygon['$']['fill']
     let hsl = convert.hex.hsl(fill)
 
-    parsed.svg.g[0].polygon[idx]['$']['fill-hsl'] = hsl.join(',')
+    parsed.svg.g[0][tag][idx]['$']['fill-hsl'] = hsl.join(',')
 
     polygon['$']['filter'] = `drop-shadow(0px 0px 5px ${fill})`
-    gemObj.svg.g[0].polygon = [polygons[idx]]
+    gemObj.svg.g[0][tag] = [gems[idx]]
     let gemXML = builder.buildObject(gemObj)
     fs.writeFileSync(gemFilePath, gemXML)
   }
@@ -43,11 +48,13 @@ const decomposeSVG = async (filePath, outputDir) => {
 }
 
 
+const main = async (filePaths) => {
+  await Promise.all(filePaths.map(filePath => {
+    const parsed = path.parse(filePath)
+    const outputDir = path.join(parsed.dir, parsed.name)
+    return decomposeSVG(filePath, outputDir)
+  }))
 
-const main = async () => {
-  const filePath = path.join(assetsDir, fileName)
-  const outputDir = path.join(assetsDir, 'Cicle_Vascule.5')
-  await decomposeSVG(filePath, outputDir)
 }
 
-main()
+main(process.argv.slice(2))
