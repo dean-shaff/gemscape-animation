@@ -109,6 +109,8 @@ const BrightnessSandbox = (props) => {
         <div className="block">
         <p>HSLuv color is {fillHsluv.map(f => f.toFixed(2).toString()).join(', ')}</p>
         <p>Fill Opacity is {opacity}</p>
+        <p>For the grid on the left, brightness increases as you move down, and <em>saturation</em> increases as you move from left to right</p>
+        <p>For the grid on the right, brightness increases as you move down, and <em>opacity</em> increases as you move from left to right</p>
         </div>
         <svg width={width} height={height}>
           {satBrightnessRects}
