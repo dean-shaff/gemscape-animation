@@ -14,18 +14,22 @@ const decomposeSVG = async (filePath, outputDir) => {
     fs.mkdirSync(outputDir)
   }
 
-  const builder = new xml2js.Builder();
+  const builder = new xml2js.Builder({headless: true});
 
   const contents = fs.readFileSync(filePath, 'utf8')
   const parsed = await xml2js.parseStringPromise(contents)
-  const common = JSON.parse(JSON.stringify(parsed))
+  const {version, preserveAspectRatio, ...rest} = parsed.svg['$']
+  const common = {
+    svg: {
+      '$': rest
+    }
+  }
+
   let tag = 'polygon'
-  if (common.svg.g[0][tag] === undefined) {
+  if (parsed.svg.g[0][tag] === undefined) {
     tag = 'path'
   }
-  const gems = common.svg.g[0][tag]
-  common.svg.g.splice(1, 1)
-  console.log(common.svg.g)
+  const gems = parsed.svg.g[0][tag]
 
   for (let idx=0; idx<gems.length; idx++) {
     let gemFilePath = path.join(outputDir, `gem.${idx}.svg`)
@@ -37,24 +41,26 @@ const decomposeSVG = async (filePath, outputDir) => {
     parsed.svg.g[0][tag][idx]['$']['fill-hsl'] = hsl.join(',')
 
     polygon['$']['filter'] = `drop-shadow(0px 0px 5px ${fill})`
-    gemObj.svg.g[0][tag] = [gems[idx]]
+    gemObj.svg[tag] = [gems[idx]]
     let gemXML = builder.buildObject(gemObj)
     fs.writeFileSync(gemFilePath, gemXML)
   }
 
-  const gemXML = builder.buildObject(parsed)
-  const outputFilePath = path.join(outputDir, path.basename(filePath))
-  fs.writeFileSync(outputFilePath, gemXML)
+  // const gemXML = builder.buildObject(parsed)
+  // const outputFilePath = path.join(outputDir, path.basename(filePath))
+  // fs.writeFileSync(outputFilePath, gemXML)
 }
 
 
 const main = async (filePaths) => {
   await Promise.all(filePaths.map(filePath => {
+    console.log(`Processing ${filePath}`)
     const parsed = path.parse(filePath)
     const outputDir = path.join(parsed.dir, parsed.name)
-    return decomposeSVG(filePath, outputDir)
+    return decomposeSVG(filePath, outputDir).catch(err => {
+      console.error(`Error processing ${filePath}`)
+    })
   }))
-
 }
 
 main(process.argv.slice(2))

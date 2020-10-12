@@ -98,7 +98,14 @@ export const parseGemscapeXML = function (gemTags) {
       if (elem === undefined) {
         return null
       } else {
-        return elem.getAttribute(name)
+        if (Array.isArray(name)) {
+          return name.reduce((acc, cur) => {
+            acc[cur] = get(elem, cur)
+            return acc
+          }, {})
+        } else {
+          return elem.getAttribute(name)
+        }
       }
     }
 
@@ -113,20 +120,11 @@ export const parseGemscapeXML = function (gemTags) {
     }
     let parsed = {
       'paths': [],
-      'rect': {
-        'fill': get(rect, 'fill'),
-        'height': get(rect, 'height'),
-        'width': get(rect, 'width'),
-        'x': get(rect, 'x'),
-        'y': get(rect, 'y')
-      },
+      'rect': get(rect, ['fill', 'width', 'height', 'x', 'y']),
       'g': {
         'transform': get(g, 'transform')
       },
-      'svg': {
-        'height': get(svg, 'height'),
-        'width': get(svg, 'width')
-      }
+      'svg': get(svg, ['height', 'width', 'xmlns', 'version', 'preserveAspectRatio'])
     }
     for (let path of paths) {
       if (! gemTags.includes(path.tagName)) {

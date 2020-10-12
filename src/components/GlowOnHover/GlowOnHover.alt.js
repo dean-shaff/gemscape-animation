@@ -96,8 +96,8 @@ const GlowOnHover = (props) => {
           const fillOpacityInterp = fillOpacity.interpolate([0, 1], [0, 1])
           return (
             <g key={idx}>
-              <animated.image key={idx} href={path} style={{'opacity': filterOpacityInterp}}/>
               <g {...parsed.g}>
+                <animated.image key={idx} href={path} style={{'opacity': filterOpacityInterp}}/>
                 <AnimatedGem {...parsed.paths[idx]} fill={fill} fillOpacity={fillOpacityInterp} ref={ref => pathRefs[idx] = ref} {...rest}/>
               </g>
             </g>
