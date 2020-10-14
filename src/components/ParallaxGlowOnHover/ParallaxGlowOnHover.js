@@ -4,6 +4,7 @@ import { useSprings, animated } from 'react-spring'
 
 import hsluv from 'hsluv'
 
+import Toggle from './../Toggle.js'
 import Slider from './../Slider.js'
 import Gemscape from "./../Gemscape.js"
 import Gem from './../Gem.js'
@@ -41,6 +42,8 @@ const ParallaxGlowOnHover = (props) => {
 
   const [saturationFactor, setSaturationFactor] = useState(1.0)
   const [brightnessFactor, setBrightnessFactor] = useState(1.0)
+  const [useParallax, setUseParallax] = useState(true)
+  const [useGlowOnHover, setUseGlowOnHover] = useState(true)
 
   const [springs, set, stop] = useSprings(
     props.number, idx => ({
@@ -135,6 +138,14 @@ const ParallaxGlowOnHover = (props) => {
         </div>
         <div className="column">
           <Slider title="Brightness Adjustment Factor" val={brightnessFactor} onChange={(evt) => {setBrightnessFactor(parseFloat(evt.target.value))}} min={1.0} max={2.0} step={0.1}/>
+        </div>
+      </div>
+      <div className="columns">
+        <div className="column">
+          <Toggle title="Toggle Parallax" checked={useParallax} onChange={() => {setUseParallax(! useParallax)}}/>
+        </div>
+        <div className="column">
+          <Toggle title="Toggle GlowOnHover" checked={useGlowOnHover} onChange={() => {setUseGlowOnHover(! useGlowOnHover)}}/>
         </div>
       </div>
       <svg {...parsed.svg} ref={gemscapeRef}>

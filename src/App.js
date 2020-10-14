@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 
+import Toggle from './components/Toggle.js'
 import { ParallaxContainer, ParallaxByLayer, Parallax } from "./components/Parallax"
 import { ParallaxGlowOnHover } from './components/ParallaxGlowOnHover'
 import { GlowOnHoverAlt, BrightnessSandbox } from "./components/GlowOnHover"
@@ -114,10 +115,7 @@ class App extends Component {
           <div className="navbar-menu">
             <div className="navbar-end">
               <div className="navbar-item">
-                <div className="field">
-                  <input id="darkModeToggle" type="checkbox" name="darkModeToggle" className="switch" checked={this.state.checked} onClick={this.handleToggleChange} onChange={this.handleToggleChange}/>
-                  <label htmlFor="darkModeToggle">Toggle Dark Mode</label>
-                </div>
+                <Toggle title="Toggle Dark Mode" checked={this.state.checked} onChange={this.handleToggleChange}/>
               </div>
             </div>
           </div>
