@@ -1,3 +1,24 @@
+export const calcCursorFactory = function (svgRef) {
+  return (x, y) => {
+    // const svg = gemscapeRef.current.svg
+    let point = svgRef.createSVGPoint()
+    point.x = x
+    point.y = y
+    const cursor = point.matrixTransform(svgRef.getScreenCTM().inverse())
+    return [cursor.x, cursor.y]
+  }
+}
+
+export const calcTransformFactory = function (svgObj, xScale, yScale) {
+  const [width, height] = [svgObj.svg['width'], svgObj.svg['height']]
+  return (x, y) => {
+    let xPos = (x - width/2)
+    let yPos = (y - height/2)
+    let translateStr = `translate(${xPos*xScale}, ${yPos*yScale})`
+    return translateStr
+  }
+}
+
 export const loadSVG = async function (selector, url) {
   let target = document.querySelector(selector)
   let ajax = new XMLHttpRequest();

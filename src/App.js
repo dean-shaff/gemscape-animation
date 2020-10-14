@@ -1,10 +1,11 @@
 import React, { Component } from "react"
 
 import { ParallaxContainer, ParallaxByLayer, Parallax } from "./components/Parallax"
+import { ParallaxGlowOnHover } from './components/ParallaxGlowOnHover'
 import { GlowOnHoverAlt, BrightnessSandbox } from "./components/GlowOnHover"
 import AnimationContainer from './components/AnimationContainer.js'
 import AnimationContainerWithSliders from './components/AnimationContainerWithSliders.js'
-import { getFilesList, getSVG, parseGemscapeXML } from "./util.js"
+import { getFilesList, getSVG, parseGemscapeXML } from "./util"
 
 import "./App.css"
 
@@ -24,7 +25,6 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleToggleChange = this.handleToggleChange.bind(this)
-
   }
 
   async componentDidMount() {
@@ -139,12 +139,13 @@ class App extends Component {
               </div>
             </div>
             <div className="container">
-              <AnimationContainer title="Brightness/Saturation Playground">
+              {/*<AnimationContainer title="Brightness/Saturation Playground">
                 <BrightnessSandbox parsedSVG={this.state.svg} number={this.state.number}/>
-              </AnimationContainer>
-              <AnimationContainerWithSliders title="GlowOnHover" component={GlowOnHoverAlt} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
+              </AnimationContainer>*/}
+              <AnimationContainerWithSliders title="Parallax GlowOnHover" component={ParallaxGlowOnHover} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
+              {/*<AnimationContainerWithSliders title="GlowOnHover" component={GlowOnHoverAlt} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
               <ParallaxContainer parsedSVG={this.state.svg} component={ParallaxByLayer} title="Parallax By Layer"/>
-              <ParallaxContainer parsedSVG={this.state.svg} component={Parallax} title="Parallax"/>
+              <ParallaxContainer parsedSVG={this.state.svg} component={Parallax} title="Parallax"/>*/}
             </div>
           </div>
         </section>

@@ -24,6 +24,11 @@ export const glowingFill = (saturationFactor, brightnessFactor) => {
       // up saturation and brightness
       fillHsluv[1] = saturationFactor*fillHsluv[1]
       fillHsluv[2] = brightnessFactor*fillHsluv[2]
+      for (let idx=1; idx<=2; idx++) {
+        if (fillHsluv[idx] > 100) {
+          fillHsluv[idx] = 100
+        }
+      }
       fill = hsluv.hsluvToHex(fillHsluv)
     }
     return fill

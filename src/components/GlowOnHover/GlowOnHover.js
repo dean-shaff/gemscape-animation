@@ -5,7 +5,7 @@ import { useSprings, animated } from 'react-spring'
 
 import Gemscape from "./../Gemscape.js"
 import Gem from './../Gem.js'
-import { calcOffset } from './../../util.js'
+import { calcOffset } from './../../util'
 
 const AnimatedGem = animated(Gem)
 const AnimatedFeDropShadow = animated('feDropShadow')
