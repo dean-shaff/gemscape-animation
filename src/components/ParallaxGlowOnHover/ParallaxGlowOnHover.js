@@ -61,7 +61,7 @@ const ParallaxGlowOnHover = (props) => {
     })
   )
 
-  const [width, setWidth, stopWidth] = useSpring(() => ({width: 100}))
+  const [width, setWidth, stopWidth] = useSpring(() => ({width: 100, config: props.config}))
 
   useEffect(() => {
     attributesRef.current = null
@@ -76,6 +76,7 @@ const ParallaxGlowOnHover = (props) => {
 
   useEffect(() => {
     attributesRef.current = null
+    setWidth()
     // glowingAttributesRef.current = null
     // parallaxAttributesRef.current = null
   }, [
@@ -106,7 +107,7 @@ const ParallaxGlowOnHover = (props) => {
 
     for (const obj of attributesRef.current(x, y)) {
       if (obj.idx === 0) {
-        setWidth({width: obj.screenCursor.x})
+        setWidth({width: obj.screenCursor.x, config: props.config})
       }
       // let translateStr = defaults[obj.idx].transform
       // let transformStr = defaults[obj.idx].transform
