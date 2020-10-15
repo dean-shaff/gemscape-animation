@@ -38,10 +38,10 @@ class AnimationContainerWithSliders extends React.Component {
     })
     // config.clamp = true
     const Component = this.props.component
-    config = {
-      'transition': 1000,
-      'easing': easings.easeCubic
-    }
+    // config = {
+    //   'transition': 1000,
+    //   'easing': easings.easeCubic
+    // }
     return (
       <AnimationContainer title={this.props.title}>
         <SpringSliders {...config} onChange={this.handleChange}/>

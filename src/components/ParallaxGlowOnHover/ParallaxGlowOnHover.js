@@ -1,6 +1,6 @@
 import React,  { Component, useRef, useState, useEffect } from "react"
 import ReactDOM from 'react-dom'
-import { useSprings, animated } from 'react-spring'
+import { useSprings, useSpring, animated } from 'react-spring'
 
 import hsluv from 'hsluv'
 
@@ -61,6 +61,8 @@ const ParallaxGlowOnHover = (props) => {
     })
   )
 
+  const [width, setWidth, stopWidth] = useSpring(() => ({width: 100}))
+
   useEffect(() => {
     attributesRef.current = null
     // glowingAttributesRef.current = null
@@ -103,6 +105,9 @@ const ParallaxGlowOnHover = (props) => {
     const defaults = getDefault(props.parsedSVG.paths)
 
     for (const obj of attributesRef.current(x, y)) {
+      if (obj.idx === 0) {
+        setWidth({width: obj.screenCursor.x})
+      }
       // let translateStr = defaults[obj.idx].transform
       // let transformStr = defaults[obj.idx].transform
       let transform = {
@@ -255,6 +260,7 @@ const ParallaxGlowOnHover = (props) => {
       </div>
       <svg {...parsed.svg} ref={gemscapeRef}>
         <rect {...parsed.rect}/>
+        <animated.rect width={width.width} x={0} y={0} height={parsed.rect.height} fill="050505"/>
         {springs.map((props, idx) => {
           const path = `${dirName}/gem.${idx}.svg`
           const {fillOpacity, fill, ...rest} = props
