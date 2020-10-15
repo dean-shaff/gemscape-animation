@@ -1,7 +1,7 @@
 
 import hsluv from 'hsluv'
 
-import { isFunction } from './util.js'
+import { isFunction, calcOffset } from './util.js'
 
 
 export const glowingOpacity = (ref, inside) => {
@@ -51,16 +51,29 @@ export const toggle = (trueVal, falseVal) => {
   }
 }
 
-export const glowingTransform = (ref, inside) => {
-  if (inside) {
-    let bbox = ref.getBBox()
-    let [xOffset, yOffset] = [
-      calcOffset(bbox.x, bbox.width, this.props.scaleFactor),
-      calcOffset(bbox.y, bbox.height, this.props.scaleFactor),
-    ]
-    return `scale(${this.props.scaleFactor}) translate(${-xOffset}, ${-yOffset})`
-  } else {
-    return 'scale(1.0) translate(0.0, 0.0)'
+
+export const glowingTransform = function (scaleFactor) {
+  return (ref, inside) => {
+    if (inside) {
+      let bbox = ref.getBBox()
+      let [xOffset, yOffset] = [
+        calcOffset(bbox.x, bbox.width, scaleFactor),
+        calcOffset(bbox.y, bbox.height, scaleFactor),
+      ]
+      return {
+        'scale': scaleFactor,
+        'x': -xOffset,
+        'y': -yOffset
+      }
+      // return `scale(${scaleFactor}) translate(${-xOffset}, ${-yOffset})`
+    } else {
+      return {
+        'scale': 1.0,
+        'x': 0,
+        'y': 0
+      }
+      // return 'scale(1.0) translate(0.0, 0.0)'
+    }
   }
 }
 

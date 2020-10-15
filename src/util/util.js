@@ -2,7 +2,6 @@ export const isFunction = (obj) => {
   return !!(obj && obj.constructor && obj.call && obj.apply);
 }
 
-
 export const calcCursorFactory = function (svgRef) {
   return (x, y) => {
     // const svg = gemscapeRef.current.svg
@@ -10,9 +9,13 @@ export const calcCursorFactory = function (svgRef) {
     point.x = x
     point.y = y
     const cursor = point.matrixTransform(svgRef.getScreenCTM().inverse())
-    return [cursor.x, cursor.y]
+    return cursor
+    // return [cursor.x, cursor.y]
   }
 }
+
+export const getCursorFactory = calcCursorFactory
+
 
 export const calcTransformFactory = function (svgObj, xScale, yScale) {
   const [width, height] = [svgObj.svg['width'], svgObj.svg['height']]
