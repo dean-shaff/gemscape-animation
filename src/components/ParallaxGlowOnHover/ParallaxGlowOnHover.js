@@ -96,32 +96,42 @@ const ParallaxGlowOnHover = (props) => {
         gemscapeRef, pathRefs)([glowingOpacity, glowingFill(saturationFactor, brightnessFactor)])
     }
 
-    let attributes = glowingAttributesRef.current(x, y)
-    if (attributes === null) {
-      attributes = getDefault(props.parsedSVG.paths)
+    const defaults = getDefault(props.parsedSVG.paths)
+    let attributes = defaults
+
+    if (useGlowOnHover) {
+      attributes = glowingAttributesRef.current(x, y)
+      if (attributes === null) {
+        attributes = defaults
+      }
     }
     // calculate transforms for parallax
-    if (parallaxAttributesRef.current === null) {
-      parallaxAttributesRef.current = ((ref) => {
-        const calcCursor = calcCursorFactory(ref)
-        const [width, height] = [ref.getAttribute('width'), ref.getAttribute('height')]
-        const nLayers = (new Set(pathRefs.map(path => path.path.getAttribute('layer')))).size
-        return (_x, _y) => {
-          const [x, y] = calcCursor(_x, _y)
-          return pathRefs.map((path, idx) => {
-            const layer = parseInt(path.path.getAttribute('layer')) + parallaxPlane - nLayers
-            const xScale = layer * 0.001 * parallaxFactor
-            const yScale = layer * 0.001 * parallaxFactor
-            const xPos = (x - width/2)
-            const yPos = (y - height/2)
-            const translateStr = `translate(${xPos*xScale} ${yPos*yScale})`
-            return translateStr
-          })
-        }
-      })(gemscapeRef.current)
+
+    let translates = defaults.map(p => p[2])
+
+    if (useParallax) {
+      if (parallaxAttributesRef.current === null) {
+        parallaxAttributesRef.current = ((ref) => {
+          const calcCursor = calcCursorFactory(ref)
+          const [width, height] = [ref.getAttribute('width'), ref.getAttribute('height')]
+          const nLayers = (new Set(pathRefs.map(path => path.path.getAttribute('layer')))).size
+          return (_x, _y) => {
+            const [x, y] = calcCursor(_x, _y)
+            return pathRefs.map((path, idx) => {
+              const layer = parseInt(path.path.getAttribute('layer')) + parallaxPlane - nLayers
+              const xScale = layer * 0.001 * parallaxFactor
+              const yScale = layer * 0.001 * parallaxFactor
+              const xPos = (x - width/2)
+              const yPos = (y - height/2)
+              const translateStr = `translate(${xPos*xScale} ${yPos*yScale})`
+              return translateStr
+            })
+          }
+        })(gemscapeRef.current)
+      }
+      translates = parallaxAttributesRef.current(x, y)
     }
 
-    const translates = parallaxAttributesRef.current(x, y)
 
     set(idx => ({
         'fillOpacity': attributes[idx][0],
@@ -167,9 +177,9 @@ const ParallaxGlowOnHover = (props) => {
       <div className="columns">
         <div className="column">
           <Toggle title="Toggle Parallax" checked={useParallax} onChange={() => {setUseParallax(! useParallax)}}/>
+          <Toggle title="Toggle GlowOnHover" checked={useGlowOnHover} onChange={() => {setUseGlowOnHover(! useGlowOnHover)}}/>
         </div>
         <div className="column">
-          <Toggle title="Toggle GlowOnHover" checked={useGlowOnHover} onChange={() => {setUseGlowOnHover(! useGlowOnHover)}}/>
         </div>
       </div>
       <svg {...parsed.svg} ref={gemscapeRef}>
