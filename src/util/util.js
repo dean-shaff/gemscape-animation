@@ -1,3 +1,8 @@
+export const isFunction = (obj) => {
+  return !!(obj && obj.constructor && obj.call && obj.apply);
+}
+
+
 export const calcCursorFactory = function (svgRef) {
   return (x, y) => {
     // const svg = gemscapeRef.current.svg

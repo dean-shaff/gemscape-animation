@@ -27,11 +27,11 @@ const ParallaxGlowOnHover = (props) => {
   console.log(`ParallaxGlowOnHover: props.number=${props.number}, props.config=${JSON.stringify(props.config, null, 2)}`)
 
   const getDefault = (paths) => {
-    return paths.map(path => ([
-      parseFloat(path['__fillopacity']),
-      path['__fill'],
-      'translate(0 0)'
-    ]))
+    return paths.map(path => ({
+      'fillOpacity': parseFloat(path['__fillopacity']),
+      'fill': path['__fill'],
+      'transform': 'translate(0 0)'
+    }))
   }
 
   const gemscapeRef = useRef(null)
@@ -64,12 +64,7 @@ const ParallaxGlowOnHover = (props) => {
       return
     }
     const defaults = getDefault(props.parsedSVG.paths)
-    set(idx => ({
-        'fillOpacity': defaults[idx][0],
-        'fill': defaults[idx][1],
-        'transform': 'translate(0 0)'
-      })
-    )
+    set(idx => defaults[idx])
   }, [props.parsedSVG])
 
   useEffect(() => {
@@ -93,7 +88,11 @@ const ParallaxGlowOnHover = (props) => {
     }
     if (glowingAttributesRef.current === null) {
       glowingAttributesRef.current = cursorInsidePaths(
-        gemscapeRef, pathRefs)([glowingOpacity, glowingFill(saturationFactor, brightnessFactor)])
+        gemscapeRef, pathRefs
+      )({
+        'fillOpacity': glowingOpacity,
+        'fill': glowingFill(saturationFactor, brightnessFactor)
+      })
     }
 
     const defaults = getDefault(props.parsedSVG.paths)
@@ -106,8 +105,6 @@ const ParallaxGlowOnHover = (props) => {
       }
     }
     // calculate transforms for parallax
-
-    let translates = defaults.map(p => p[2])
 
     if (useParallax) {
       if (parallaxAttributesRef.current === null) {
@@ -129,14 +126,11 @@ const ParallaxGlowOnHover = (props) => {
           }
         })(gemscapeRef.current)
       }
-      translates = parallaxAttributesRef.current(x, y)
+      const translates = parallaxAttributesRef.current(x, y)
+      translates.forEach((t, idx) => attributes[idx]['transform'] = t)
     }
-
-
     set(idx => ({
-        'fillOpacity': attributes[idx][0],
-        'fill': attributes[idx][1],
-        'transform': translates[idx],
+        ...attributes[idx],
         'config': props.config
       })
     )

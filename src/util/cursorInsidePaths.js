@@ -1,15 +1,14 @@
 
 import hsluv from 'hsluv'
 
+import { isFunction } from './util.js'
+
 
 export const glowingOpacity = (ref, inside) => {
   let fillOpacity = parseFloat(ref.getAttribute('__fillopacity'))
   if (inside) {
-    // let returnVal = fillOpacity * 1.5
-    // if (returnVal > 1.0) {
-    //   returnVal = 1.0
-    // }
-    return Math.sqrt(fillOpacity)
+    return Math.pow(fillOpacity, 1/6)
+    // return Math.sqrt(fillOpacity)
   } else {
     return fillOpacity
   }
@@ -86,8 +85,14 @@ export const cursorInsidePaths = (gemscapeRef, pathRefs) => {
           let inside = ref.isPointInFill(cursor)
           if (Array.isArray(cb)) {
             return cb.map(f => f(ref, inside))
-          } else {
+          } else if (isFunction(cb)) {
             return cb(ref, inside)
+          } else {
+            // means we provided an object
+            return Object.keys(cb).reduce((acc, cur) => {
+              acc[cur] = cb[cur](ref, inside)
+              return acc
+            }, {})
           }
         })
         return result
