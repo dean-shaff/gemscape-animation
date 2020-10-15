@@ -44,6 +44,9 @@ const ParallaxGlowOnHover = (props) => {
   const [brightnessFactor, setBrightnessFactor] = useState(1.0)
   const [useParallax, setUseParallax] = useState(true)
   const [useGlowOnHover, setUseGlowOnHover] = useState(true)
+  const [parallaxFactor, setParallaxFactor] = useState(2)
+  const [parallaxPlane, setParallaxPlane] = useState(2)
+
 
   const [springs, set, stop] = useSprings(
     props.number, idx => ({
@@ -72,7 +75,15 @@ const ParallaxGlowOnHover = (props) => {
   useEffect(() => {
     glowingAttributesRef.current = null
     parallaxAttributesRef.current = null
-  }, [props.config, saturationFactor, brightnessFactor])
+  }, [
+    props.config,
+    saturationFactor,
+    brightnessFactor,
+    useParallax,
+    useGlowOnHover,
+    parallaxFactor,
+    parallaxPlane
+  ])
 
 
   const onMouseMove = ({ clientX: x, clientY: y }) => {
@@ -98,9 +109,9 @@ const ParallaxGlowOnHover = (props) => {
         return (_x, _y) => {
           const [x, y] = calcCursor(_x, _y)
           return pathRefs.map((path, idx) => {
-            const layer = parseInt(path.path.getAttribute('layer')) + 2 - nLayers
-            const xScale = layer * 0.002
-            const yScale = layer * 0.002
+            const layer = parseInt(path.path.getAttribute('layer')) + parallaxPlane - nLayers
+            const xScale = layer * 0.001 * parallaxFactor
+            const yScale = layer * 0.001 * parallaxFactor
             const xPos = (x - width/2)
             const yPos = (y - height/2)
             const translateStr = `translate(${xPos*xScale} ${yPos*yScale})`
@@ -123,6 +134,13 @@ const ParallaxGlowOnHover = (props) => {
 
   const parsed = props.parsedSVG
 
+  const setFactor = (setter) => {
+    return (evt) => {
+      setter(parseFloat(evt.target.value))
+    }
+  }
+
+
   if (parsed === null) {
     return null
   } else {
@@ -134,10 +152,16 @@ const ParallaxGlowOnHover = (props) => {
       <div>
       <div className="columns">
         <div className="column">
-          <Slider title="Saturation Adjustment Factor" val={saturationFactor} onChange={(evt) => {setSaturationFactor(parseFloat(evt.target.value))}} min={1.0} max={2.0} step={0.1}/>
+          <Slider title="Saturation Adjustment Factor" val={saturationFactor} onChange={setFactor(setSaturationFactor)} min={1.0} max={2.0} step={0.1}/>
         </div>
         <div className="column">
-          <Slider title="Brightness Adjustment Factor" val={brightnessFactor} onChange={(evt) => {setBrightnessFactor(parseFloat(evt.target.value))}} min={1.0} max={2.0} step={0.1}/>
+          <Slider title="Brightness Adjustment Factor" val={brightnessFactor} onChange={setFactor(setBrightnessFactor)} min={1.0} max={2.0} step={0.1}/>
+        </div>
+        <div className="column">
+          <Slider title="Parallax Adjustment Factor" val={parallaxFactor} onChange={setFactor(setParallaxFactor)} min={1} max={15} step={1}/>
+        </div>
+        <div className="column">
+          <Slider title="Parallax Plane" val={parallaxPlane} onChange={(evt) => {setParallaxPlane(parseFloat(evt.target.value))}} min={1} max={3} step={1}/>
         </div>
       </div>
       <div className="columns">
