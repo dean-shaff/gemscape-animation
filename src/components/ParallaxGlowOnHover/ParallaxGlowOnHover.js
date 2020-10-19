@@ -23,7 +23,9 @@ import mouseGemRefGenerator from './../../util/mouseGemRefGenerator.js'
 import './ParallaxGlowOnHover.css'
 
 const AnimatedGem = animated(Gem)
-
+const AnimatedFeTurbulence = animated('feTurbulence')
+const AnimatedFeDisplacementMap = animated('feDisplacementMap')
+const AnimatedFilter = animated('filter')
 
 const ParallaxGlowOnHover = (props) => {
   console.log(`ParallaxGlowOnHover: props.number=${props.number}, props.config=${JSON.stringify(props.config, null, 2)}`)
@@ -61,7 +63,10 @@ const ParallaxGlowOnHover = (props) => {
     })
   )
 
+  const [offset, setOffset, stopOffset] = useSpring(() => ({offset: 0, config: props.config}))
   const [width, setWidth, stopWidth] = useSpring(() => ({width: 100, config: props.config}))
+  const [spring, setSpring, stopSpring] = useSpring(() => ({freq: 0.05, config: props.config}))
+
 
   useEffect(() => {
     attributesRef.current = null
@@ -107,7 +112,14 @@ const ParallaxGlowOnHover = (props) => {
 
     for (const obj of attributesRef.current(x, y)) {
       if (obj.idx === 0) {
+        const bbox = gemscapeRef.current.getBBox()
+        // const newX = obj.screenCursor.x - bbox.width/2
+        // const frac = obj.screenCursor.x/bbox.width
+        // setOffset({offset: 100*frac, config: props.config})
+        // setSpring({freq: frac*0.05 + 0.1, config: props.config})
+        // setWidth({width: obj.svgCursor.x, config: props.config})
         setWidth({width: obj.screenCursor.x, config: props.config})
+        // setWidth({width: newX, config: props.config})
       }
       // let translateStr = defaults[obj.idx].transform
       // let transformStr = defaults[obj.idx].transform
@@ -260,19 +272,69 @@ const ParallaxGlowOnHover = (props) => {
         </div>
       </div>
       <svg {...parsed.svg} ref={gemscapeRef}>
+        <defs>
+          <clipPath id="clip">
+            <animated.rect width={width.width} fill="#000000" x={0} y={0} height={parsed.rect.height}/>
+          </clipPath>
+          <clipPath id="grayscale-clip">
+            <animated.rect width={parsed.rect.width} fill="#000000" x={width.width} y={0} height={parsed.rect.height}/>
+          </clipPath>
+          <filter id="grayscale">
+            <feColorMatrix type="matrix" values="0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0"/>
+          </filter>
+          {/*<linearGradient id="linear-gradient">
+            <stop offset="0%" stopColor="white"/>
+            <animated.stop offset={offset.offset.interpolate(o => `${o-5}%`)} stopColor="white"/>
+            <animated.stop offset={offset.offset.interpolate(o => `${o}%`)} stopColor="white" stopOpacity="30%"/>
+            <animated.stop offset={offset.offset.interpolate(o => `${o+5}%`)} stopColor="white"/>
+            <stop offset="100%" stopColor="white"/>
+          </linearGradient>*/}
+
+          {/*<AnimatedFilter id="water" x="0" width="100%">
+            <AnimatedFeTurbulence type="fractalNoise" baseFrequency={0.1} numOctaves="2" result="TURB" seed="8" />
+            <AnimatedFeDisplacementMap xChannelSelector="R" yChannelSelector="G" in="SourceGraphic" in2="TURB" result="DISP" scale={offset.offset.interpolate(o => `${o}`)} />
+          </AnimatedFilter>*/}
+
+          {/*<linearGradient id="linear-gradient">
+            <stop offset="0%" stopColor="black"/>
+            <animated.stop offset={offset.offset} stopColor="black" stopOpacity="30%"/>
+            <stop offset="100%" stopColor="black"/>
+          </linearGradient>*/}
+
+          <mask id="mask">
+            <rect x={0} width={parsed.rect.width} height={parsed.rect.height} fill="url(#linear-gradient)"/>
+          </mask>
+
+        </defs>
         <rect {...parsed.rect}/>
-        <animated.rect width={width.width} x={0} y={0} height={parsed.rect.height} fill="050505"/>
-        {springs.map((props, idx) => {
-          const path = `${dirName}/gem.${idx}.svg`
-          const {fillOpacity, fill, ...rest} = props
-          const fillOpacityInterp = fillOpacity.interpolate([0, 1], [0, 1])
-          return (
-            <g key={idx}>
-              <g {...parsed.g}>
-                <AnimatedGem {...parsed.paths[idx]} fill={fill} fillOpacity={fillOpacityInterp} ref={ref => pathRefs[idx] = ref} {...rest}/>
-              </g>
-            </g>
-        )})}
+        <g clipPath="url(#grayscale-clip)">
+          <g {...parsed.g}  filter="url(#grayscale)">
+            {springs.map((props, idx) => {
+              const {transform, fillOpacity, fill, ...rest} = props
+              return <AnimatedGem key={`grayscale-${idx}`} {...parsed.paths[idx]} transform={transform} {...rest}/>
+            })}
+          </g>
+        </g>
+        <g clipPath="url(#clip)">
+          <g {...parsed.g}>
+            {springs.map((props, idx) => {
+              const path = `${dirName}/gem.${idx}.svg`
+              const {fillOpacity, fill, ...rest} = props
+              const fillOpacityInterp = fillOpacity.interpolate([0, 1], [0, 1])
+              return (
+                  <g key={idx}>
+                  {/*<Gem  {...parsed.paths[idx]} clipPath="url(#grayscale-clip)" filter="url(#grayscale)"/>*/}
+                  <AnimatedGem
+                    {...parsed.paths[idx]}
+                    fill={fill}
+                    fillOpacity={fillOpacityInterp}
+                    ref={ref => pathRefs[idx] = ref} {...rest}/>
+                  </g>
+                )
+              })
+            }
+          </g>
+        </g>
       </svg>
       </div>
     )
