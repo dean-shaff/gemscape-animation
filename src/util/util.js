@@ -180,12 +180,16 @@ export const parseGemscapeXML = function (gemTags) {
 }
 
 export const calcOffset = (pos, len, scaleFactor) =>  {
+  // console.log(`calcOffset: ${pos}, ${len}, ${scaleFactor}`)
+  // let center = pos + len/2
+  // let offset1 = (1.0 - scaleFactor)*center
+  // console.log(`calcOffset: offset1=${offset1}`)
+  // return offset1
+
   let scale = scaleFactor - 1.0
-  // let offset = -((scaledPos - pos) + (scaledLen - len)/2)
-  // let offset = -(scaledPos - pos)
-  // let offset = (scaledLen - len)/2
   let offset = pos*scale + len*scale/2
-  offset /= scaleFactor
+  // offset /= scaleFactor
+  // console.log(`calcOffset: offset=${offset}`)
   return offset
 }
 

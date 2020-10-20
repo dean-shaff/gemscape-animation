@@ -30,18 +30,17 @@ const AnimatedFilter = animated('filter')
 const ParallaxGlowOnHover = (props) => {
   console.log(`ParallaxGlowOnHover: props.number=${props.number}, props.config=${JSON.stringify(props.config, null, 2)}`)
 
+
   const getDefault = (paths) => {
     return paths.map(path => ({
       'fillOpacity': parseFloat(path['__fillopacity']),
       'fill': path['__fill'],
-      'transform': 'scale(1.0) translate(0 0)'
+      'transform': 'translate(0 0) scale(1)'
     }))
   }
 
   const gemscapeRef = useRef(null)
   const attributesRef = useRef(null)
-  // const glowingAttributesRef = useRef(null)
-  // const parallaxAttributesRef = useRef(null)
 
   const pathRefs = []
 
@@ -53,25 +52,22 @@ const ParallaxGlowOnHover = (props) => {
   const [parallaxPlane, setParallaxPlane] = useState(2)
   const [scaleFactor, setScaleFactor] = useState(1.05)
 
+  window.transforms = []
 
   const [springs, set, stop] = useSprings(
     props.number, idx => ({
       'fillOpacity': 1,
       'fill': '#ffffff',
-      'transform': 'scale(1.0) translate(0 0)',
-      'config': props.config
+      'transform': 'translate(0 0) scale(1.0)',
+      'config': props.config,
+      'onFrame': val => { window.transforms.push(val.transform) }
     })
   )
 
-  const [offset, setOffset, stopOffset] = useSpring(() => ({offset: 0, config: props.config}))
   const [width, setWidth, stopWidth] = useSpring(() => ({width: 100, config: props.config}))
-  const [spring, setSpring, stopSpring] = useSpring(() => ({freq: 0.05, config: props.config}))
-
 
   useEffect(() => {
     attributesRef.current = null
-    // glowingAttributesRef.current = null
-    // parallaxAttributesRef.current = null
     if (props.parsedSVG === null) {
       return
     }
@@ -81,9 +77,8 @@ const ParallaxGlowOnHover = (props) => {
 
   useEffect(() => {
     attributesRef.current = null
-    setWidth()
-    // glowingAttributesRef.current = null
-    // parallaxAttributesRef.current = null
+    setWidth({'config': props.config})
+    set(idx => ({'config': props.config}))
   }, [
     props.config,
     saturationFactor,
@@ -118,12 +113,12 @@ const ParallaxGlowOnHover = (props) => {
         // setOffset({offset: 100*frac, config: props.config})
         // setSpring({freq: frac*0.05 + 0.1, config: props.config})
         // setWidth({width: obj.svgCursor.x, config: props.config})
-        setWidth({width: obj.screenCursor.x, config: props.config})
+        setWidth({width: obj.screenCursor.x})
         // setWidth({width: newX, config: props.config})
       }
       // let translateStr = defaults[obj.idx].transform
       // let transformStr = defaults[obj.idx].transform
-      let transform = {
+      const transform = {
         'scale': 1.0,
         'x': 0.0,
         'y': 0.0
@@ -137,13 +132,15 @@ const ParallaxGlowOnHover = (props) => {
         const yScale = parallaxLayer * 0.001 * parallaxFactor
         const xPos = (obj.screenCursor.x - width/2)
         const yPos = (obj.screenCursor.y - height/2)
-        if (obj.inside) {
-          transform.x = xPos*xScale/scaleFactor
-          transform.y = yPos*yScale/scaleFactor
-        } else {
-          transform.x = xPos*xScale
-          transform.y = yPos*yScale
-        }
+        transform.x = xPos*xScale
+        transform.y = yPos*yScale
+        // if (obj.inside) {
+        //   transform.x = xPos*xScale/scaleFactor
+        //   transform.y = yPos*yScale/scaleFactor
+        // } else {
+        //   transform.x = xPos*xScale
+        //   transform.y = yPos*yScale
+        // }
       }
       let fillOpacity = defaults[obj.idx].fillOpacity
       let fill = defaults[obj.idx].fill
@@ -152,9 +149,7 @@ const ParallaxGlowOnHover = (props) => {
         if (layer > 0) {
           fillOpacity = getFillOpacity(obj.ref, obj.inside)
           fill = getFill(obj.ref, obj.inside)
-          // console.log(getTransform(obj.ref, obj.inside))
-          // translateStr = getTransform(obj.ref, obj.inside)
-          let transformObj = getTransform(obj.ref, obj.inside)
+          const transformObj = getTransform(obj.ref, obj.inside)
           transform.x += transformObj.x
           transform.y += transformObj.y
           transform.scale = transformObj.scale
@@ -164,67 +159,15 @@ const ParallaxGlowOnHover = (props) => {
       attributes.push({
         'fillOpacity': fillOpacity,
         'fill': fill,
-        'transform': `scale(${transform.scale}) translate(${transform.x} ${transform.y})`
+        'transform': `translate(${transform.x} ${transform.y}) scale(${transform.scale}) `
       })
     }
     set(idx => ({
       ...attributes[idx],
-      'config': props.config
+      config: props.config
     }))
   }
 
-  // const onMouseMove = ({ clientX: x, clientY: y }) => {
-  //   // console.log(`onMouseMove: props.config=${JSON.stringify(props.config, null, 2)}`)
-  //   if (gemscapeRef.current === null || pathRefs.length === 0) {
-  //     return
-  //   }
-  //   if (glowingAttributesRef.current === null) {
-  //     glowingAttributesRef.current = cursorInsidePaths(gemscapeRef, pathRefs)({
-  //       'fillOpacity': glowingOpacity,
-  //       'fill': glowingFill(saturationFactor, brightnessFactor)
-  //     })
-  //   }
-  //
-  //   const defaults = getDefault(props.parsedSVG.paths)
-  //   let attributes = defaults
-  //
-  //   if (useGlowOnHover) {
-  //     attributes = glowingAttributesRef.current(x, y)
-  //     if (attributes === null) {
-  //       attributes = defaults
-  //     }
-  //   }
-  //   // calculate transforms for parallax
-  //
-  //   if (useParallax) {
-  //     if (parallaxAttributesRef.current === null) {
-  //       parallaxAttributesRef.current = ((ref) => {
-  //         const calcCursor = calcCursorFactory(ref)
-  //         const [width, height] = [ref.getAttribute('width'), ref.getAttribute('height')]
-  //         const nLayers = (new Set(pathRefs.map(path => path.path.getAttribute('layer')))).size
-  //         return (_x, _y) => {
-  //           const [x, y] = calcCursor(_x, _y)
-  //           return pathRefs.map((path, idx) => {
-  //             const layer = parseInt(path.path.getAttribute('layer')) + parallaxPlane - nLayers
-  //             const xScale = layer * 0.001 * parallaxFactor
-  //             const yScale = layer * 0.001 * parallaxFactor
-  //             const xPos = (x - width/2)
-  //             const yPos = (y - height/2)
-  //             const translateStr = `translate(${xPos*xScale} ${yPos*yScale})`
-  //             return translateStr
-  //           })
-  //         }
-  //       })(gemscapeRef.current)
-  //     }
-  //     const translates = parallaxAttributesRef.current(x, y)
-  //     translates.forEach((t, idx) => attributes[idx]['transform'] = t)
-  //   }
-  //   set(idx => ({
-  //       ...attributes[idx],
-  //       'config': props.config
-  //     })
-  //   )
-  // }
 
   const parsed = props.parsedSVG
 
@@ -274,7 +217,7 @@ const ParallaxGlowOnHover = (props) => {
       <svg {...parsed.svg} ref={gemscapeRef}>
         <defs>
           <clipPath id="clip">
-            <animated.rect width={width.width} fill="#000000" x={0} y={0} height={parsed.rect.height}/>
+            <animated.rect width={parsed.rect.width} fill="#000000" x={0} y={0} height={parsed.rect.height}/>
           </clipPath>
           <clipPath id="grayscale-clip">
             <animated.rect width={parsed.rect.width} fill="#000000" x={width.width} y={0} height={parsed.rect.height}/>
@@ -307,7 +250,7 @@ const ParallaxGlowOnHover = (props) => {
 
         </defs>
         <rect {...parsed.rect}/>
-        <g clipPath="url(#grayscale-clip)">
+        {/*<g clipPath="url(#grayscale-clip)">
           <g {...parsed.g}>
             {springs.map((props, idx) => {
               const transform = props.transform
@@ -315,7 +258,7 @@ const ParallaxGlowOnHover = (props) => {
               return <AnimatedGem key={`grayscale-${idx}`} {...rest} fill="black" fillOpacity="0.5" transform={transform}/>
             })}
           </g>
-        </g>
+        </g>*/}
         <g clipPath="url(#clip)">
           <g {...parsed.g}>
             {springs.map((props, idx) => {
@@ -329,7 +272,8 @@ const ParallaxGlowOnHover = (props) => {
                     {...parsed.paths[idx]}
                     fill={fill}
                     fillOpacity={fillOpacityInterp}
-                    ref={ref => pathRefs[idx] = ref} {...rest}/>
+                    ref={ref => pathRefs[idx] = ref}
+                    {...rest}/>
                   </g>
                 )
               })
