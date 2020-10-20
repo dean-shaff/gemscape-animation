@@ -308,10 +308,11 @@ const ParallaxGlowOnHover = (props) => {
         </defs>
         <rect {...parsed.rect}/>
         <g clipPath="url(#grayscale-clip)">
-          <g {...parsed.g}  filter="url(#grayscale)">
+          <g {...parsed.g}>
             {springs.map((props, idx) => {
-              const {transform, fillOpacity, fill, ...rest} = props
-              return <AnimatedGem key={`grayscale-${idx}`} {...parsed.paths[idx]} transform={transform} {...rest}/>
+              const transform = props.transform
+              const {fill, ...rest} = parsed.paths[idx]
+              return <AnimatedGem key={`grayscale-${idx}`} {...rest} fill="black" fillOpacity="0.5" transform={transform}/>
             })}
           </g>
         </g>
