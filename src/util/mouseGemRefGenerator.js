@@ -12,15 +12,15 @@ const mouseGemRefGenerator = (gemscapeRef, pathRefs) => {
     const first = pathRefs[0].path
     if (first !== undefined) {
       const matrix = first.getCTM()
-      const svgCursor = screenCursor.matrixTransform(matrix.inverse())
+      const pathCursor = screenCursor.matrixTransform(matrix.inverse())
       for (let idx=0; idx<pathRefs.length; idx++) {
         const ref = pathRefs[idx].path
         yield {
           'ref': ref,
           'idx': idx,
-          'inside': ref.isPointInFill(svgCursor),
+          'inside': ref.isPointInFill(pathCursor),
           'screenCursor': screenCursor,
-          'svgCursor': svgCursor
+          'pathCursor': pathCursor,
         }
       }
     }

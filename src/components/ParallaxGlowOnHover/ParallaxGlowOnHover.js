@@ -40,6 +40,7 @@ const ParallaxGlowOnHover = (props) => {
   }
 
   const gemscapeRef = useRef(null)
+  const gRef = useRef(null)
   const attributesRef = useRef(null)
 
   const pathRefs = []
@@ -64,7 +65,8 @@ const ParallaxGlowOnHover = (props) => {
     })
   )
 
-  const [width, setWidth, stopWidth] = useSpring(() => ({width: 100, config: props.config}))
+  const [playCursor, setPlayCursor, stopPlayCursor] = useSpring(() => ({offset: 100, config: props.config}))
+  // const [width, setWidth, stopWidth] = useSpring(() => ({width: 100, config: props.config}))
 
   useEffect(() => {
     attributesRef.current = null
@@ -77,7 +79,7 @@ const ParallaxGlowOnHover = (props) => {
 
   useEffect(() => {
     attributesRef.current = null
-    setWidth({'config': props.config})
+    setPlayCursor({'config': props.config})
     set(idx => ({'config': props.config}))
   }, [
     props.config,
@@ -107,23 +109,15 @@ const ParallaxGlowOnHover = (props) => {
 
     for (const obj of attributesRef.current(x, y)) {
       if (obj.idx === 0) {
-        const bbox = gemscapeRef.current.getBBox()
-        // const newX = obj.screenCursor.x - bbox.width/2
-        // const frac = obj.screenCursor.x/bbox.width
-        // setOffset({offset: 100*frac, config: props.config})
-        // setSpring({freq: frac*0.05 + 0.1, config: props.config})
-        // setWidth({width: obj.svgCursor.x, config: props.config})
-        setWidth({width: obj.screenCursor.x})
-        // setWidth({width: newX, config: props.config})
+        const frac = obj.screenCursor.x/props.parsedSVG.rect.width
+        setPlayCursor({ offset: 100*frac })
       }
-      // let translateStr = defaults[obj.idx].transform
-      // let transformStr = defaults[obj.idx].transform
+
       const transform = {
         'scale': 1.0,
         'x': 0.0,
         'y': 0.0
       }
-
 
       const layer = parseInt(obj.ref.getAttribute('layer'))
       if (useParallax) {
@@ -134,13 +128,6 @@ const ParallaxGlowOnHover = (props) => {
         const yPos = (obj.screenCursor.y - height/2)
         transform.x = xPos*xScale
         transform.y = yPos*yScale
-        // if (obj.inside) {
-        //   transform.x = xPos*xScale/scaleFactor
-        //   transform.y = yPos*yScale/scaleFactor
-        // } else {
-        //   transform.x = xPos*xScale
-        //   transform.y = yPos*yScale
-        // }
       }
       let fillOpacity = defaults[obj.idx].fillOpacity
       let fill = defaults[obj.idx].fill
@@ -216,22 +203,21 @@ const ParallaxGlowOnHover = (props) => {
       </div>
       <svg {...parsed.svg} ref={gemscapeRef}>
         <defs>
-          <clipPath id="clip">
+          {/*<clipPath id="clip">
             <animated.rect width={parsed.rect.width} fill="#000000" x={0} y={0} height={parsed.rect.height}/>
           </clipPath>
           <clipPath id="grayscale-clip">
             <animated.rect width={parsed.rect.width} fill="#000000" x={width.width} y={0} height={parsed.rect.height}/>
-          </clipPath>
-          <filter id="grayscale">
+          </clipPath>*/}
+          {/*<filter id="grayscale">
             <feColorMatrix type="matrix" values="0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0"/>
-          </filter>
-          {/*<linearGradient id="linear-gradient">
+          </filter>*/}
+          <linearGradient id="linear-gradient">
             <stop offset="0%" stopColor="white"/>
-            <animated.stop offset={offset.offset.interpolate(o => `${o-5}%`)} stopColor="white"/>
-            <animated.stop offset={offset.offset.interpolate(o => `${o}%`)} stopColor="white" stopOpacity="30%"/>
-            <animated.stop offset={offset.offset.interpolate(o => `${o+5}%`)} stopColor="white"/>
-            <stop offset="100%" stopColor="white"/>
-          </linearGradient>*/}
+            <animated.stop offset={playCursor.offset.interpolate(o => `${o}%`)} stopColor="white"/>
+            <animated.stop offset={playCursor.offset.interpolate(o => `${o + 1}%`)} stopColor="white" stopOpacity="30%"/>
+            <stop offset="100%" stopColor="white" stopOpacity="30%"/>
+          </linearGradient>
 
           {/*<AnimatedFilter id="water" x="0" width="100%">
             <AnimatedFeTurbulence type="fractalNoise" baseFrequency={0.1} numOctaves="2" result="TURB" seed="8" />
@@ -259,10 +245,15 @@ const ParallaxGlowOnHover = (props) => {
             })}
           </g>
         </g>*/}
-        <g clipPath="url(#clip)">
+        <g
+          ref={gRef}
+          // onMouseMove={onMouseMove}
+          mask="url(#mask)"
+          // clipPath="url(#clip)"
+          >
           <g {...parsed.g}>
             {springs.map((props, idx) => {
-              const path = `${dirName}/gem.${idx}.svg`
+              // const path = `${dirName}/gem.${idx}.svg`
               const {fillOpacity, fill, ...rest} = props
               const fillOpacityInterp = fillOpacity.interpolate([0, 1], [0, 1])
               return (
