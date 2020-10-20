@@ -1,3 +1,5 @@
+import hsluv from 'hsluv'
+
 export const isFunction = (obj) => {
   return !!(obj && obj.constructor && obj.call && obj.apply);
 }
@@ -168,6 +170,7 @@ export const parseGemscapeXML = function (gemTags) {
         'fillOpacity': get(path, 'fill-opacity'),
         '__fillopacity': get(path, 'fill-opacity'),
         'fill': get(path, 'fill'),
+        '__fillgreyscale': greyscale(get(path, 'fill')),
         '__fill': get(path, 'fill'),
         'layer': get(path, 'layer'),
         'label': get(path, 'label'),
@@ -197,3 +200,15 @@ export const calcOffset = (pos, len, scaleFactor) =>  {
 export const calcDist = ([x0, y0], [x1, y1]) => {
   return Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2))
 }
+
+export const greyscale = function (color) {
+  const colorHSLuv = hsluv.hexToHsluv(color)
+  colorHSLuv[1] = 0
+  return hsluv.hsluvToHex(colorHSLuv)
+}
+
+
+// export const setHSLuvSaturation = function (color, val) => {
+//   const hslColor = hsluv.hexToHsluv(color)
+//
+// }

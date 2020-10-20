@@ -40,7 +40,6 @@ const ParallaxGlowOnHover = (props) => {
   }
 
   const gemscapeRef = useRef(null)
-  const gRef = useRef(null)
   const attributesRef = useRef(null)
 
   const pathRefs = []
@@ -109,7 +108,9 @@ const ParallaxGlowOnHover = (props) => {
 
     for (const obj of attributesRef.current(x, y)) {
       if (obj.idx === 0) {
-        const frac = obj.screenCursor.x/props.parsedSVG.rect.width
+        // const frac = obj.screenCursor.x/props.parsedSVG.rect.width
+        const bbox = gemscapeRef.current.getBBox()
+        const frac = obj.screenCursor.x/width
         setPlayCursor({ offset: 100*frac })
       }
 
@@ -143,6 +144,13 @@ const ParallaxGlowOnHover = (props) => {
         }
       }
 
+      const bbox = obj.ref.getBBox()
+      console.log(bbox.x + bbox.width, obj.pathCursor.x)
+      if (obj.pathCursor.x < bbox.x && layer !== 0) {
+        fill = props.parsedSVG.paths[obj.idx].__fillgreyscale
+      }
+
+
       attributes.push({
         'fillOpacity': fillOpacity,
         'fill': fill,
@@ -171,6 +179,8 @@ const ParallaxGlowOnHover = (props) => {
     parsed.svg.onMouseMove = onMouseMove
     const dirName = `assets/${props.fileName.replace('.svg', '')}`
     // parsed.svg.onClick = onMouseMove
+
+    const interp = playCursor.offset.interpolate(o => `${o}%`)
 
     return (
       <div>
@@ -203,21 +213,22 @@ const ParallaxGlowOnHover = (props) => {
       </div>
       <svg {...parsed.svg} ref={gemscapeRef}>
         <defs>
-          {/*<clipPath id="clip">
-            <animated.rect width={parsed.rect.width} fill="#000000" x={0} y={0} height={parsed.rect.height}/>
+          <clipPath id="clip">
+            <animated.rect width={interp} fill="#000000" x={0} y={0} height={parsed.rect.height}/>
           </clipPath>
           <clipPath id="grayscale-clip">
-            <animated.rect width={parsed.rect.width} fill="#000000" x={width.width} y={0} height={parsed.rect.height}/>
-          </clipPath>*/}
+            <animated.rect width={parsed.rect.width} fill="#000000" x={interp} y={0} height={parsed.rect.height}/>
+          </clipPath>
           {/*<filter id="grayscale">
             <feColorMatrix type="matrix" values="0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0"/>
           </filter>*/}
-          <linearGradient id="linear-gradient">
+
+          {/*<linearGradient id="linear-gradient">
             <stop offset="0%" stopColor="white"/>
             <animated.stop offset={playCursor.offset.interpolate(o => `${o}%`)} stopColor="white"/>
             <animated.stop offset={playCursor.offset.interpolate(o => `${o + 1}%`)} stopColor="white" stopOpacity="30%"/>
             <stop offset="100%" stopColor="white" stopOpacity="30%"/>
-          </linearGradient>
+          </linearGradient>*/}
 
           {/*<AnimatedFilter id="water" x="0" width="100%">
             <AnimatedFeTurbulence type="fractalNoise" baseFrequency={0.1} numOctaves="2" result="TURB" seed="8" />
@@ -230,47 +241,54 @@ const ParallaxGlowOnHover = (props) => {
             <stop offset="100%" stopColor="black"/>
           </linearGradient>*/}
 
-          <mask id="mask">
+          {/*<mask id="mask">
             <rect x={0} width={parsed.rect.width} height={parsed.rect.height} fill="url(#linear-gradient)"/>
-          </mask>
+          </mask>*/}
 
         </defs>
         <rect {...parsed.rect}/>
-        {/*<g clipPath="url(#grayscale-clip)">
+        <g clipPath="url(#grayscale-clip)">
           <g {...parsed.g}>
             {springs.map((props, idx) => {
               const transform = props.transform
-              const {fill, ...rest} = parsed.paths[idx]
-              return <AnimatedGem key={`grayscale-${idx}`} {...rest} fill="black" fillOpacity="0.5" transform={transform}/>
+              const {fill, __fillgreyscale, ...rest} = parsed.paths[idx]
+
+              const layer = parseInt(parsed.paths[idx].layer)
+              if (layer != null) {
+                if (layer === 0) {
+                  return <AnimatedGem key={`grayscale-${idx}`} {...rest} fill={__fillgreyscale} fillOpacity="0.5" transform={transform}/>
+                }
+              }
+              return null
             })}
           </g>
-        </g>*/}
-        <g
-          ref={gRef}
-          // onMouseMove={onMouseMove}
-          mask="url(#mask)"
-          // clipPath="url(#clip)"
-          >
-          <g {...parsed.g}>
+        </g>
             {springs.map((props, idx) => {
               // const path = `${dirName}/gem.${idx}.svg`
               const {fillOpacity, fill, ...rest} = props
               const fillOpacityInterp = fillOpacity.interpolate([0, 1], [0, 1])
+              const layer = parseInt(parsed.paths[idx].layer)
+              let clipPath = null
+              if (layer === 0) {
+                clipPath = "url(#clip)"
+              }
               return (
-                  <g key={idx}>
-                  {/*<Gem  {...parsed.paths[idx]} clipPath="url(#grayscale-clip)" filter="url(#grayscale)"/>*/}
-                  <AnimatedGem
-                    {...parsed.paths[idx]}
-                    fill={fill}
-                    fillOpacity={fillOpacityInterp}
-                    ref={ref => pathRefs[idx] = ref}
-                    {...rest}/>
+                <g clipPath={clipPath} key={idx}>
+                  <g {...parsed.g}>
+                    <g key={idx}>
+                    {/*<Gem  {...parsed.paths[idx]} clipPath="url(#grayscale-clip)" filter="url(#grayscale)"/>*/}
+                    <AnimatedGem
+                      {...parsed.paths[idx]}
+                      fill={fill}
+                      fillOpacity={fillOpacityInterp}
+                      ref={ref => pathRefs[idx] = ref}
+                      {...rest}/>
+                    </g>
                   </g>
+                </g>
                 )
               })
             }
-          </g>
-        </g>
       </svg>
       </div>
     )
