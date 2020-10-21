@@ -142,9 +142,9 @@ class App extends Component {
               <AnimationContainer title="HSLuv Intensity Playground">
                 <HSLuvHueIntensityPlayground parsedSVG={this.state.svg}/>
               </AnimationContainer>
-              <AnimationContainer title="Brightness/Saturation Playground">
+              {/*<AnimationContainer title="Brightness/Saturation Playground">
                 <BrightnessSandbox parsedSVG={this.state.svg} number={this.state.number}/>
-              </AnimationContainer>
+              </AnimationContainer>*/}
               <AnimationContainerWithSliders title="Parallax GlowOnHover" component={ParallaxGlowOnHover} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
               {/*<AnimationContainerWithSliders title="GlowOnHover" component={GlowOnHoverAlt} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
               <ParallaxContainer parsedSVG={this.state.svg} component={ParallaxByLayer} title="Parallax By Layer"/>
