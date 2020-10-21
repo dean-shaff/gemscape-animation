@@ -12,11 +12,12 @@ import {
   calcOffset,
   cursorInsidePaths,
   glowingOpacity,
-  glowingFill,
+  // glowingFill,
   glowingTransform,
   toggle,
   calcCursorFactory,
-  calcTransformFactory
+  calcTransformFactory,
+  HSLuvHueIntensityMap
 } from './../../util'
 import mouseGemRefGenerator from './../../util/mouseGemRefGenerator.js'
 
@@ -26,6 +27,17 @@ const AnimatedGem = animated(Gem)
 const AnimatedFeTurbulence = animated('feTurbulence')
 const AnimatedFeDisplacementMap = animated('feDisplacementMap')
 const AnimatedFilter = animated('filter')
+
+const glowingFill = function (intensityFactor) {
+  return (ref, inside) => {
+    let fill = ref.getAttribute('__fill')
+    if (inside) {
+      fill = HSLuvHueIntensityMap(fill, intensityFactor)
+    }
+    return fill
+  }
+}
+
 
 const ParallaxGlowOnHover = (props) => {
   console.log(`ParallaxGlowOnHover: props.number=${props.number}, props.config=${JSON.stringify(props.config, null, 2)}`)
@@ -46,6 +58,7 @@ const ParallaxGlowOnHover = (props) => {
 
   const [saturationFactor, setSaturationFactor] = useState(1.1)
   const [brightnessFactor, setBrightnessFactor] = useState(1.1)
+  const [intensityFactor, setIntensityFactor] = useState(10)
   const [useParallax, setUseParallax] = useState(true)
   const [useGlowOnHover, setUseGlowOnHover] = useState(true)
   const [parallaxFactor, setParallaxFactor] = useState(2)
@@ -84,6 +97,7 @@ const ParallaxGlowOnHover = (props) => {
     props.config,
     saturationFactor,
     brightnessFactor,
+    intensityFactor,
     scaleFactor,
     useParallax,
     useGlowOnHover,
@@ -99,7 +113,8 @@ const ParallaxGlowOnHover = (props) => {
       attributesRef.current = mouseGemRefGenerator(gemscapeRef, pathRefs)
     }
     const getFillOpacity = glowingOpacity
-    const getFill = glowingFill(saturationFactor, brightnessFactor)
+    // const getFill = glowingFill(saturationFactor, brightnessFactor)
+    const getFill = glowingFill(intensityFactor)
     const getTransform = glowingTransform(scaleFactor)
     const [width, height] = [gemscapeRef.current.getAttribute('width'), gemscapeRef.current.getAttribute('height')]
     const nLayers = (new Set(pathRefs.map(path => path.path.getAttribute('layer')))).size
@@ -145,7 +160,7 @@ const ParallaxGlowOnHover = (props) => {
       }
 
       const bbox = obj.ref.getBBox()
-      console.log(bbox.x + bbox.width, obj.pathCursor.x)
+      // console.log(bbox.x + bbox.width, obj.pathCursor.x)
       if (obj.pathCursor.x < bbox.x && layer !== 0) {
         fill = props.parsedSVG.paths[obj.idx].__fillgreyscale
       }
@@ -177,7 +192,7 @@ const ParallaxGlowOnHover = (props) => {
     return null
   } else {
     parsed.svg.onMouseMove = onMouseMove
-    const dirName = `assets/${props.fileName.replace('.svg', '')}`
+    // const dirName = `assets/${props.fileName.replace('.svg', '')}`
     // parsed.svg.onClick = onMouseMove
 
     const interp = playCursor.offset.interpolate(o => `${o}%`)
@@ -186,11 +201,15 @@ const ParallaxGlowOnHover = (props) => {
       <div>
       <div className="columns">
         <div className="column">
+          <Slider title="Intensity Adjustment Factor" val={intensityFactor} onChange={setFactor(setIntensityFactor)} min={1} max={20} step={1}/>
+        </div>
+
+        {/*<div className="column">
           <Slider title="Saturation Adjustment Factor" val={saturationFactor} onChange={setFactor(setSaturationFactor)} min={1.0} max={2.0} step={0.1}/>
         </div>
         <div className="column">
           <Slider title="Brightness Adjustment Factor" val={brightnessFactor} onChange={setFactor(setBrightnessFactor)} min={1.0} max={2.0} step={0.1}/>
-        </div>
+        </div>*/}
         <div className="column">
           <Slider title="Scale Adjustment Factor" val={scaleFactor} onChange={setFactor(setScaleFactor)} min={1.0} max={2.0} step={0.05}/>
         </div>

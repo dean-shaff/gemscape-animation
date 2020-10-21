@@ -6,6 +6,7 @@ import { ParallaxGlowOnHover } from './components/ParallaxGlowOnHover'
 import { GlowOnHoverAlt, BrightnessSandbox } from "./components/GlowOnHover"
 import AnimationContainer from './components/AnimationContainer.js'
 import AnimationContainerWithSliders from './components/AnimationContainerWithSliders.js'
+import HSLuvHueIntensityPlayground from './components/HSLuvHueIntensityPlayground'
 import { getFilesList, getSVG, parseGemscapeXML } from "./util"
 
 import "./App.css"
@@ -138,9 +139,12 @@ class App extends Component {
               </div>
             </div>
             <div className="container">
-              {/*<AnimationContainer title="Brightness/Saturation Playground">
+              <AnimationContainer title="HSLuv Intensity Playground">
+                <HSLuvHueIntensityPlayground parsedSVG={this.state.svg}/>
+              </AnimationContainer>
+              <AnimationContainer title="Brightness/Saturation Playground">
                 <BrightnessSandbox parsedSVG={this.state.svg} number={this.state.number}/>
-              </AnimationContainer>*/}
+              </AnimationContainer>
               <AnimationContainerWithSliders title="Parallax GlowOnHover" component={ParallaxGlowOnHover} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
               {/*<AnimationContainerWithSliders title="GlowOnHover" component={GlowOnHoverAlt} fileName={this.state.currentFileName} parsedSVG={this.state.svg} number={this.state.number}/>
               <ParallaxContainer parsedSVG={this.state.svg} component={ParallaxByLayer} title="Parallax By Layer"/>
